@@ -131,7 +131,7 @@ React が Compositional であるという特徴を活かせる HOC パターン
 ## Presentational&Containerパターン
 [Presentational&Containerパターン](https://www.patterns.dev/react/presentational-container-pattern)ではコンポーネントの役割を Presentation と Container という 2 つのカテゴリで分けて考えます。
 - Container Components: データの管理をするコンポーネント。**自身がラップする**Presentation Components に必要なデータを受け渡す責務。
-- Presentation Components: データ Container Components から取得し、表示するコンポーネント。受け取ったデータを**変更することなく**期待通りに表示する責務。
+- Presentation Components: データをContainer Components から取得し、表示するコンポーネント。受け取ったデータを**変更することなく**期待通りに表示する責務。
 
 Presentational&Container パターンは React において[SoC - 関心の分離](https://en.wikipedia.org/wiki/Separation_of_concerns)を実現する方法の 1 つとして広く知られています。
 具体的には、このパターンによりビュー(Presentation)をロジック（Container）から分離できます。
