@@ -3,7 +3,7 @@ title: "プロジェクトを理解するためのReactデザインパターン"
 emoji: "🎨"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["react", "javascript"]
-published: true
+published: false
 publication_name: "cybozu_frontend"
 published_at: 2023-12-10 10:00 # 未来の日時を指定する
 ---
