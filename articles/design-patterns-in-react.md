@@ -41,7 +41,7 @@ https://github.com/saku-1101/design-patterns-demo/blob/6d2d1f5e3dd6722b514098a40
 「商品量の取得・追加・削除を制御するカードの中のボタン」と「商品量を表示するカートのバッジ」でそれぞれ上記のコードを書いても結果は同じなのですが、冗長さや再利用性、メンテナンス性のことを考えると避けたい方法です。
 その代わりに、React Hooks を用いたロジックを `useLocalStorage` というカスタム Hooks に切り出して、`localStorage` を操作する箇所をカスタム Hooks に集約させることができます。これで、`localStorage` が必要なときは「ボタン」も「バッジ」も `useLocalStorage` を使用すれば良くなります。
 
-もちろん `localStorage` 以外にも、カスタム Hooks を使うと便利な局面はたくさんあって、
+`localStorage` 以外にも、カスタム Hooks を使うと便利な局面はたくさんあり、
 - データフェッチをするとき
 - window にアクセスするとき
 - 複数のコンポーネント間で `state` の切り替えをするとき
