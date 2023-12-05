@@ -1,0 +1,40 @@
+{
+  "rules": {
+    "preset-ja-technical-writing": {
+      "no-exclamation-question-mark": false,
+      "no-doubled-joshi": false,
+      "ja-no-successive-word": {
+        "allow": [
+          "・"
+        ]
+      },
+      "ja-no-mixed-period": {
+        "allowPeriodMarks": [
+          ":"
+        ]
+      },
+      "max-comma": false,
+      "ja-no-weak-phrase": {
+        "severity": "warning"
+      },
+      "ja-no-redundant-expression": {
+        "severity": "warning"
+      },
+      "sentence-length": false
+    },
+    "preset-ja-spacing": {
+      "ja-space-between-half-and-full-width": {
+        "space": "always",
+        "exceptPunctuation": true
+      },
+      "ja-space-around-code": {
+        "before": true,
+        "after": true
+      }
+    },
+    "preset-bengo4": true
+  },
+  "@proofdict/proofdict": {
+    "dictURL": "https://azu.github.io/proof-dictionary/"
+  }
+}
