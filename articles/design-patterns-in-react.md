@@ -42,7 +42,14 @@ https://github.com/saku-1101/design-patterns-demo/blob/6d2d1f5e3dd6722b514098a40
 「商品量の取得・追加・削除を制御するカードの中のボタン」と「商品量を表示するカートのバッジ」でそれぞれ上記のコードを書いても結果は同じなのですが、冗長さや再利用性、メンテナンス性のことを考えると避けたい方法です。
 その代わりに、React Hooks を用いたロジックを `useLocalStorage` というカスタム Hooks に切り出して、`localStorage` を操作する箇所をカスタム Hooks に集約させることができます。これで、`localStorage` が必要なときは「ボタン」も「バッジ」も `useLocalStorage` を使用すれば良くなります。
 
+<<<<<<< HEAD
 `localStorage` 以外にも、カスタム Hooks を使うと便利な局面はたくさんあり、外部システムやブラウザ API とのやり取りに関するロジックを隠蔽するときなどに、特にカスタム Hooks の効果が発揮されます。
+=======
+`localStorage` 以外にも、カスタム Hooks を使うと便利な局面はたくさんあり、
+- データフェッチをするとき
+- window にアクセスするとき
+- 複数のコンポーネント間で `state` の切り替えをするとき
+>>>>>>> 77aa50dd209ce57fe449ea3c4dd8b1501a52c687
 
 ## 高階コンポーネント(higher-order component; HOC)パターン
 高階コンポーネントパターンの前に「高階」とはどういった意味なのでしょうか？😶
@@ -126,8 +133,8 @@ React が Compositional であるという特徴を活かせる HOC パターン
 
 ## Presentational&Containerパターン
 [Presentational&Containerパターン](https://www.patterns.dev/react/presentational-container-pattern)ではコンポーネントの役割を Presentation と Container という 2 つのカテゴリで分けて考えます。
-- Container Components: データの管理をするコンポーネント。自身が**ラップする**Presentation Components に必要なデータを受け渡す責務。
-- Presentation Components: データ Container Components から取得し、表示するコンポーネント。受け取ったデータを**変更することなく**期待通りに表示する責務。
+- Container Components: データの管理をするコンポーネント。自身がラップするPresentation Components に**必要なデータを受け渡す**責務。
+- Presentation Components: データ Container Components から取得し、表示するコンポーネント。**受け取ったデータを変更することなく期待通りに表示する**責務。
 
 Presentational&Container パターンは React において[SoC - 関心の分離](https://en.wikipedia.org/wiki/Separation_of_concerns)を実現する方法の 1 つとして広く知られています。
 具体的には、このパターンによりビュー(Presenter)をロジック（Container）から分離できます。
@@ -233,6 +240,6 @@ https://github.com/saku-1101/design-patterns-demo/blob/6d2d1f5e3dd6722b514098a40
 
 の 5 つの React におけるデザインパターンについて実践を交えながらまとめてみました。
 
-パターンを理解することで、コードの仕組みや意図を理解するための時間を短縮でき、関わる人にとって分かりやすいコードが何なのかを理解できるなどのメリットがあります。
+パターンを理解することで、コードの仕組みや意図を理解するための時間を短縮でき、関わる人にとって分かりやすいコードが何なのかを把握できるなどのメリットがあります。
 
 とはいえ、こうしたパターンをコードに落とし込む技術は一朝一夕に身につくものではないので、読み手を意識したコーディングを日々心がけていきたいです🌱
