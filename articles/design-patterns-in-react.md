@@ -2,10 +2,10 @@
 title: "プロジェクトを理解するためのReactデザインパターン"
 emoji: "🎨"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["react", "javascript"]
-published: false
+topics: ["react", "typescript", "javascript"]
+published: true
 publication_name: "cybozu_frontend"
-# published_at: 2023-12-10 10:00 # 未来の日時を指定する
+published_at: 2023-12-10 10:00 # 未来の日時を指定する
 ---
 
 ※ この記事は [Cybozu Frontend Advent Calendar 2023](https://adventar.org/calendars/9255) の 10 日目の記事です。
