@@ -18,18 +18,19 @@ Reactと状態は切っても切れない関係です。なぜなら、Reactは�
 :::
 
 今回使用した即席匿名メモアプリのコードベースです。
-サークルでは、コミットに沿って説明をしていきました。
+サークルでは、コミットに沿って説明をしていきました。（あくまで即席なので細かいこと気にしながら作ってませんorz）
 https://github.com/saku-1101/hooks-demo-app
 ![demoアプリ](/images/memoapp.gif)
 ## 【序章】フックとレンダーとコミットとstate
-フックとは、そもそも何なのでしょうか？Reactの公式ドキュメントにはきちんと明文化されています。
+フックとは、そもそも何なのでしょうか？
+Reactの公式ドキュメントにはきちんと明文化されています。
 
 > React では、useState やその他の use で始まる関数はフック (Hook) と呼ばれます。
 フックは、React がレンダーされている間のみ利用可能な特別な関数です。フックを使うことで、さまざまな React の機能に「接続 (hook into)」して使用することができます。
 
 Learn React - [はじめてのフック](https://ja.react.dev/learn/state-a-components-memory#meet-your-first-hook)
 
-では、**レンダーされている間**とはどの期間を指すものなのでしょうか？👀
+では、ここでいう**レンダーされている間**とはどの期間を指すものなのでしょうか？👀
 
 ### レンダーとコミット
 まず、「レンダーされている間」を捉えるために、コンポーネントが画面表示されるまでのプロセスを理解したいです。
@@ -64,13 +65,15 @@ Reactは呼び出し(レンダー)に差異があった場合にのみ，DOMを�
 
 こうして生成されるstateを利用して、そのJSX内のprops、EventHandler、ローカル変数などが計算されます。
 
+これからフックについてお話ししていきますが、「レンダー」に関して（？）となったときは、この章に戻ってきてみてください🌻
+
 ## 【序章】フックの全体像
-stateはReactを理解する上で最も理解しておきたい機能(自分調べ)ですが、フックはその他のReactの機能をさらに使いやすくしてくれます。
-そんなフックオールスターズには以下のようなものたちがいます。(stableで提供されているものを列挙しています(2024年1月末現在))
+stateはReactを理解する上で最も理解しておきたい機能(自分調べ)ですが、フックはstateを含むその他のReactの機能をさらに使いやすくしてくれます。
+そんなフックオールスターズをまとめると以下のようになります。(stableで提供されているものを列挙しています(2024年1月末現在))
 ![hooks](/images/hooks.png)
 
-こんなにたくさんいらっしゃるんですね！✨
-今回は、フックオールスターズから選抜メンバーとして
+こんなにたくさんいらっしゃったんですね！✨
+今回は、このフックオールスターズから選抜メンバーとして
 - useEffect
 - useState
 - useReducer
@@ -170,23 +173,86 @@ Context(提供されるstateの実体(の定義))とProvider(提供する親)を
 - memo
   - **コンポーネント**をキャッシュするためのAPI
 
-### useMemoを使って値をキャッシュする
+### `useMemo`を使って値をキャッシュする
+`useMemo`は値のキャッシュをしてくれる、言い換えると**レンダー前後で`useMemo`依存配列の値に差異がない場合**に**値の再計算**をスキップしてくれるフックです。
+
 まず、最適化の恩恵をわかりやすくするために、以下のバグを仕込みます。この改悪により、🧹(全表示)するときに１秒間の遅延が発生するようになってしまいました。
 🐛改悪Commit - [chore: 人為的に全てのメモを表示する時に遅延させる](https://github.com/saku-1101/hooks-demo-app/commit/85738e3a0bb74030963a22d3772b5dbcb4af592e#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 
-`useMemo`は値のキャッシュをしてくれる、言い換えると**レンダー前後で`useMemo`依存配列の値に際がない場合に値の再計算をスキップしてくれるフックです。**
-🎏
+このコミットを`useMemo`を使って改善していきます。
 📝改善Commit - [feat: useMemoによってthemeの切り替えでは遅延は起こらなくなった](https://github.com/saku-1101/hooks-demo-app/commit/43835bd5430f82a5f0fe25dbadd1f18c7ba20fb6#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 
-### useCallbackを使って関数をキャッシュする
+これで、少なくともテーマ変更時に遅延が起こるということは無くなりました！👏🏻
+
+### `useCallback`を使って関数をキャッシュする
+`useCallback`は関数のキャッシュをしてくれる、言い換えると**レンダー前後で`useCallback`依存配列の値に差異がない場合**に**関数の再生成**をスキップしてくれるフックです。
+
+### `memo`を使ってコンポーネントをキャッシュする
+`memo`はフックではなくAPIの部類なのですが、コンポーネントの最適化の際に必要なAPIです。`memo`を使用すると、**`props`が変更されていないコンポーネント**の再レンダーをスキップすることができます。
+
+以上の`useCallback`と`memo`APIをセットで使用すると、関数propsを含むコンポーネントの最適化を図れます。
+
+#### 🎏 FYI：関数の再生成と`useCallback`の使用意義
+関数propsを含むコンポーネントの最適化で`useCallback`を使用する意義を求めるとき、そもそもどうして関数のキャッシュをする必要があるのか？という疑問がフツフツと湧いてきます。
+
+以下のように関数が配置されている場合、一見、再レンダーがあっても関数は変化しないように思えます。
+```ts
+export default function Example() {
+  const handleAction = () => {
+    console.log("Action");
+  };
+  return <SomeChildComponent action={handleAction} />;
+}
+```
+しかし、`useEffect`の依存配列の差分検知の仕組みを紐解くと、関数はレンダリングのたびに再生成されることが明るみに出ます。
+`useEffect`依存配列の差分検知では、内部的には`Object.is()`を用いています。
+https://github.com/facebook/react/blob/29fbf6f62625c4262035f931681c7b7822ca9843/packages/shared/objectIs.js
+実は、この`Object.is()`ではレンダリングのたびに再生成されるObjectやSymbolの比較は期待通りに行うことができず、関数も例外ではありません。
+したがって、**実際は関数はレンダリングのたびに再生成されるもので、レンダリング前後では別の関数になってしまいます。**
+
+そうして変更があった関数を`memo`が使用されたコンポーネントに`props`として渡すとき、`memo`が使用されたコンポーネントは「あ、関数`props`に変更があった」と検知してしまい、コンポーネントの再レンダリングをしてしまうことになります。
+***
+`useCallback`と`memo`の関係を理解したところで、以下のバグを改善していきましょう！❤️‍🔥
+
+以下のコミットでは、レンダーの度に0.5秒間の遅延が発生する`MechaOsoiListItem`を仕込みました。改悪により、メモのレンダーに本質的には関係ないテーマの変更でも遅延が発生することがわかります。
 🐛改悪Commit - [chore: 人為的にメモを表示するときに遅延させる](https://github.com/saku-1101/hooks-demo-app/commit/1464a8e41209eb3f334771a7455fe3d761f4c1dd#diff-427031f7e98419706622e4274aa267fd6278e4f3f9f4bf8505b4fc79de74c7e4)
+
+`useCallback`と`memo`を用いて`MechaOsoiListItem`コンポーネントの最適化をします。
+まず、`MechaOsoiListItem`を`memo()`でラップします。これにより`MechaOsoiListItem`に渡る`props`が変更されない限りは`MechaOsoiListItem`は再レンダーされなくなります。
+https://github.com/saku-1101/hooks-demo-app/blob/bb04be114b486479bf1e03e4d7533ef887436450/src/ui/list-item.tsx#L5-L24
+次に、`MechaOsoiListItem`に渡る関数`props`を`useCallback`を用いてキャッシュします。
+https://github.com/saku-1101/hooks-demo-app/blob/bb04be114b486479bf1e03e4d7533ef887436450/src/ui/list.tsx#L37-L58
 📝改善Commit - [feat: useCallbackとmemoによってコンポーネントのメモ化(useCallback使用部分)](https://github.com/saku-1101/hooks-demo-app/commit/caeed10f4aeef808b93c4f681af88bbc2243fc28#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 📝改善Commit - [feat: useCallbackとmemoによってコンポーネントのメモ化(memo使用部分)](https://github.com/saku-1101/hooks-demo-app/commit/caeed10f4aeef808b93c4f681af88bbc2243fc28#diff-427031f7e98419706622e4274aa267fd6278e4f3f9f4bf8505b4fc79de74c7e4)
 
+これで、少なくともテーマ変更時に遅延が起こるということは無くなりました！👏🏻
 
 ## useRefでUIに関係ない値をレンダー間で保持しよう
-🐛改悪Commit - [chore: 複数のタイマーが同時に起動してしまうコンポーネント(startを押すほどカウントダウンが早くなる)](https://github.com/saku-1101/hooks-demo-app/commit/7ec4f66a6cf757843dfcbefe240d0b4828fbabae#diff-79aa0e105b07134a836fa8f5f7228226ded60539123a9a755b5ce850fbe50cbe)
+`ref`はコンポーネントがレンダリングプロセスとは別に持っている「隠し箱」のようなものです。`{current: value}`のオブジェクト形式で存在しています。
+よく、**値を保持できる**という観点で`useState`と比較されることがありますが、決定的な相違点は**レンダリングをトリガーすることができるか否かです。**
+
+|  | useState | useRef |
+| ---- | ---- | ---- |
+| 値を格納できる | ⭕ : `state` | ⭕ : `{current: value}` |
+| 再レンダリング | ⭕ : set関数を使用する為 | ❌ : 変数のように直に値を書き換える為 |
+
+再レンダリングを行わないということは、画面の更新を行わないということですので、`useRef`ではUIとは関係のない・UIには反映されない値を保持するために使用するのが適切です。
+
+UIには反映されない値の代表として、
+- DOM要素
+- timerID
+
+などが挙げられます。
+
+今回は`ref`を使用してtimerIDを管理し、タイマー機能を追加してみます。⏳
+まず、正常な挙動をしないタイマーのコミットです。startボタンを押せば押すほどタイマーが生成され、カウントダウンが早くなります。
+🐛バグCommit - [chore: 複数のタイマーが同時に起動してしまうコンポーネント(startを押すほどカウントダウンが早くなる)](https://github.com/saku-1101/hooks-demo-app/commit/7ec4f66a6cf757843dfcbefe240d0b4828fbabae#diff-79aa0e105b07134a836fa8f5f7228226ded60539123a9a755b5ce850fbe50cbe)
+
+`useRef`で生成した`ref`を使用してtimerIDを管理し、正常にタイマー機能を動作させましょう！🏋🏻
+https://github.com/saku-1101/hooks-demo-app/blob/829baf1beb316fd60a286ffacf6fba55e91566c0/src/ui/timer.tsx#L4-L32
 📝改善Commit - [feat: 正常タイマー:常に一つのタイマーしか存在しない](https://github.com/saku-1101/hooks-demo-app/commit/829baf1beb316fd60a286ffacf6fba55e91566c0#diff-79aa0e105b07134a836fa8f5f7228226ded60539123a9a755b5ce850fbe50cbe)
+
+これで、タイマー機能が追加され、デモアプリケーションが完成しました🎉
 
 ## まとめ
 Reactの状態の重要性について理解したのち、広く浅くHooksに触れました。
@@ -194,7 +260,7 @@ Reactの状態の重要性について理解したのち、広く浅くHooksに�
 今回は、あくまでReact純正のHooksに主眼を置いていたのでサードパーティ製のライブラリ等には触れませんでしたが、こうした複雑なReactの状態を少ない手順で管理しやすくしたいときに、サードパーティ製のライブラリの使用は有効です。
 ライブラリの内部では、今回理解を深めていったフックたちがふんだんに使用されているため、使用されているフックを予測したり仕組みを知りたい時にも、フック理解の効果が発揮されます。
 
-どんな技術に触れる時も、一つひとつ基本を着実に理解しながら発展させていくプロセスを大切にしたいです🧚🏻
+どんな技術に触れるときも、一つひとつ基本を着実に理解しながら発展させていくプロセスを大切にしたいです🧚🏻
 
 :::message
 間違った理解や記述があった箇所は教えていただけるととっても嬉しいです🐣
