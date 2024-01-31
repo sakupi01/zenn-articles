@@ -75,7 +75,6 @@ stateはReactを理解する上で最も理解しておきたい機能(自分調
 - useState
 - useReducer
 - useContext
-- useSyncExternalStore
 - useMemo・useCallback・memo(API)
 - useRef
 
@@ -92,7 +91,9 @@ stateはReactを理解する上で最も理解しておきたい機能(自分調
 
 ⭐️そんなuseEffectを使用して初期メモデータをフェッチしましょう！
 
-🐛バグCommit - [chore: ちょっとよくないuseEffect](https://github.com/saku-1101/hooks-demo-app/commit/01e5f46018264808809a87ddcdcc5e2af5974644#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
+これで初期メモデータを取得して表示できるようになりました！👏🏻
+
+🐛改悪Commit - [chore: ちょっとよくないuseEffect](https://github.com/saku-1101/hooks-demo-app/commit/01e5f46018264808809a87ddcdcc5e2af5974644#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 📝改善Commit - [feat: フィルタリング機能](https://github.com/saku-1101/hooks-demo-app/commit/f0a0238fb830852f88758504e38def07c3ea3428#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 
 ## useStateでレンダー間でstateを管理しよう
@@ -103,25 +104,88 @@ stateはReactを理解する上で最も理解しておきたい機能(自分調
 ⭐️そこで、`useState`を使用してレンダー間でstateを共有しつつ、コンポーネントのレンダーをトリガーしてUIを更新しましょう！
 
 
+これで、メモのCRUD処理の結果をUIと同期させることができました！🫶🏻
+
 ## useReducerでstateを一元管理しよう
 📝該当Commit - [refactor: useReducerでリファクタ](https://github.com/saku-1101/hooks-demo-app/commit/1d82ab58e10367ef91f4ae74373ebeb4ee7484a8)
 
+アプリケーションがもっと大きく複雑なものであった場合を考えてみましょう。
+
+同様のstate更新ロジックがアプリケーション全体で散見されることが考えられます。
+
+そんな時、`useReducer`を使用してstate更新ロジックを一点に集約させることができ、可読性を高めることができます。
+
+useReducerを使用するメリット
+- 「どう更新するのか」(ロジック)をReducerに、「何が起きたのか」(アクション)をイベントハンドラに書くことで、コンポーネントが更新の内部処理を知らなくてもよくなる
+- stateがどこで誤ってセットされたのか・どのロジックに問題があるのかが特定しやすくなる：**デバッガブル**
+- reducer自体はコンポーネントに依存しない純関数のため，テストしやすくなる：**テスタブル**
+
+⭐️え、そもそもreducerって？
+一度は「わからん」てなって調べたことがある組み込みメソッドから着想を得ます
+```ts
+const arr = [1, 2, 3, 4, 5];
+const sum = arr.reduce((result, currentNumber) => result + currentNumber);
+```
+- reduce() 操作: 配列を受け取り、多くの値をreduceして1 つの値に「まとめる」ことができるもの
+- reduceに渡している関数が「reducer」
+
+⭐️そんな`useReducer`を使ってuseStateで書かれたコードをリファクタリングしていきましょう！
+
+コンポーネントから`useState`が消えて、state管理のロジックがReducerに移譲されました💫
 
 ## useContextで広範囲のstateを管理しよう
 📝該当Commit - [feat: contextでテーマを変更](https://github.com/saku-1101/hooks-demo-app/commit/443237bbfc328b2638a69a088603eada4d710379)
+今度はdark/lightモードの切り替えを行えるようにしたいです。🌚🌝
 
-## useSyncExternalStoreで外部storeから値を読み取ろう
+`useContext`は以下の場合を解決してくれるフックです。
+- props を多数の中間コンポーネントを経由して渡さないといけない場合
+- アプリ内の多くのコンポーネントが同じ情報を必要とする場合
+- props の受け渡しによってコードが冗長になる場合(=prop drilling)
 
-## useMemo・useCallback・memoで最適化しよう
-🐛バグCommit - [chore: 人為的に全てのメモを表示する時に遅延させる](https://github.com/saku-1101/hooks-demo-app/commit/85738e3a0bb74030963a22d3772b5dbcb4af592e#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
+テーマのstateはアプリケーション全体に及ぶため、`useContext`が効果を発揮できると考えられます。
+
+Contextが使用されている具体例としては、
+- Reduxなどの状態管理ライブラリ
+- アカウント情報の保持
+- React Routerなどルーティング
+
+などが有名です。
+
+Context(提供されるstateの実体(の定義))とProvider(提供する親)を用意することで`useContext`は使用可能となり、Context,Providerの関係を使用するとCompound Componentsパターンを達成することができます。
+（Compound Componentsパターンをフックで実現しようとした結果`useContext`が生まれた、の方が正しいかもしれません）- [React Hooks: Compound Components](https://kentcdodds.com/blog/compound-components-with-react-hooks)
+
+⭐️早速、`useContext`を使用してアプリのテーマ変更を行えるようにしていきましょう！
+
+アプリケーションがダークモードに対応しました！✨
+## useMemo・useCallback・(memo API)で最適化しよう
+次に、メモリストにフィルター機能をつけて、❤️(いいね)、🩶(いいね無し)、🧹(全表示)でメモの出しわけをできるようにします。
+
+詳細に入る前に、useMemo・useCallback・(memo API)を一言でまとめておきます。
+目的語が大事です。
+- useMemo
+  - 重たい**関数の計算結果**・値・JSXをキャッシュするためのフック
+- useCallback
+  - 重たい**関数**をキャッシュするためのフック
+  - memoとよく使う
+- memo
+  - **コンポーネント**をキャッシュするためのAPI
+
+### useMemoを使って値をキャッシュする
+まず、最適化の恩恵をわかりやすくするために、以下のバグを仕込みます。この改悪により、🧹(全表示)するときに１秒間の遅延が発生するようになってしまいました。
+🐛改悪Commit - [chore: 人為的に全てのメモを表示する時に遅延させる](https://github.com/saku-1101/hooks-demo-app/commit/85738e3a0bb74030963a22d3772b5dbcb4af592e#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
+
+`useMemo`は値のキャッシュをしてくれる、言い換えると**レンダー前後で`useMemo`依存配列の値に際がない場合に値の再計算をスキップしてくれるフックです。**
+🎏
 📝改善Commit - [feat: useMemoによってthemeの切り替えでは遅延は起こらなくなった](https://github.com/saku-1101/hooks-demo-app/commit/43835bd5430f82a5f0fe25dbadd1f18c7ba20fb6#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
-🐛バグCommit - [chore: 人為的にメモを表示するときに遅延させる](https://github.com/saku-1101/hooks-demo-app/commit/1464a8e41209eb3f334771a7455fe3d761f4c1dd#diff-427031f7e98419706622e4274aa267fd6278e4f3f9f4bf8505b4fc79de74c7e4)
+
+### useCallbackを使って関数をキャッシュする
+🐛改悪Commit - [chore: 人為的にメモを表示するときに遅延させる](https://github.com/saku-1101/hooks-demo-app/commit/1464a8e41209eb3f334771a7455fe3d761f4c1dd#diff-427031f7e98419706622e4274aa267fd6278e4f3f9f4bf8505b4fc79de74c7e4)
 📝改善Commit - [feat: useCallbackとmemoによってコンポーネントのメモ化(useCallback使用部分)](https://github.com/saku-1101/hooks-demo-app/commit/caeed10f4aeef808b93c4f681af88bbc2243fc28#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 📝改善Commit - [feat: useCallbackとmemoによってコンポーネントのメモ化(memo使用部分)](https://github.com/saku-1101/hooks-demo-app/commit/caeed10f4aeef808b93c4f681af88bbc2243fc28#diff-427031f7e98419706622e4274aa267fd6278e4f3f9f4bf8505b4fc79de74c7e4)
 
 
 ## useRefでUIに関係ない値をレンダー間で保持しよう
-🐛バグCommit - [chore: 複数のタイマーが同時に起動してしまうコンポーネント(startを押すほどカウントダウンが早くなる)](https://github.com/saku-1101/hooks-demo-app/commit/7ec4f66a6cf757843dfcbefe240d0b4828fbabae#diff-79aa0e105b07134a836fa8f5f7228226ded60539123a9a755b5ce850fbe50cbe)
+🐛改悪Commit - [chore: 複数のタイマーが同時に起動してしまうコンポーネント(startを押すほどカウントダウンが早くなる)](https://github.com/saku-1101/hooks-demo-app/commit/7ec4f66a6cf757843dfcbefe240d0b4828fbabae#diff-79aa0e105b07134a836fa8f5f7228226ded60539123a9a755b5ce850fbe50cbe)
 📝改善Commit - [feat: 正常タイマー:常に一つのタイマーしか存在しない](https://github.com/saku-1101/hooks-demo-app/commit/829baf1beb316fd60a286ffacf6fba55e91566c0#diff-79aa0e105b07134a836fa8f5f7228226ded60539123a9a755b5ce850fbe50cbe)
 
 ## まとめ
