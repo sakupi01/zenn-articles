@@ -36,7 +36,7 @@ Learn React - [はじめてのフック](https://ja.react.dev/learn/state-a-comp
 まず、「レンダーされている間」を捉えるために、コンポーネントが画面表示されるまでのプロセスを理解したいです。
 
 コンポーネントはライフサイクル(マウント→アップデート→アンマウント)の最初のステップである「マウント」がなされる前に、まずReactによって**レンダーされてコミットされる**必要があります。
-![レンダーとコミット](images/renderandcommit.png)
+![レンダーとコミット](/images/renderandcommit.png)
 *出典 - Learn React*
 
 レンダーとは、**コンポーネントが画面表示される際に必要なプロセスの一つであり、コンポーネントがReactアプリから呼び出されることです。**
@@ -63,7 +63,7 @@ Reactは呼び出し(レンダー)に差異があった場合にのみ，DOMを�
 以下の図のように、set関数がトリガーとなって、新しいstateを持ったコンポーネントがレンダーされます。
 こうして情報の上書きはされずに再レンダーがトリガーされて新たなstateを持ったコンポーネントが出来上がるような振る舞いなので、Reactではこれを**コンポーネントのスナップショットを撮る**と表現しています。📸
 ![レンダーとstate](/images/renderandstate.png)
-*出典 - Learn React - [state 更新後の再レンダー](https://ja.react.dev/learn/render-and-commit#re-renders-when-state-updates)*
+*引用 - Learn React - [state 更新後の再レンダー](https://ja.react.dev/learn/render-and-commit#re-renders-when-state-updates)*
 
 こうして生成されるstateを利用して、そのJSX内のprops、EventHandler、ローカル変数などが計算されます。
 
@@ -228,6 +228,7 @@ https://github.com/saku-1101/hooks-demo-app/blob/bb04be114b486479bf1e03e4d7533ef
 `useMemo`は値のキャッシュをしてくれる、言い換えると**レンダー前後で`useMemo`依存配列の値に差異がない場合**に**値の再計算**をスキップしてくれるフックです。
 
 まず、最適化の恩恵をわかりやすくするために、以下のバグを仕込みます。この改悪により、🧹(全表示)するときに１秒間の遅延が発生するようになってしまいました。
+![demoアプリ](/images/usememo-prev.gif)
 🐛改悪Commit - [chore: 人為的に全てのメモを表示する時に遅延させる](https://github.com/saku-1101/hooks-demo-app/commit/85738e3a0bb74030963a22d3772b5dbcb4af592e#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 
 このコミットを`useMemo`を使って改善していきます。
@@ -235,6 +236,7 @@ https://github.com/saku-1101/hooks-demo-app/blob/bb04be114b486479bf1e03e4d7533ef
 https://github.com/saku-1101/hooks-demo-app/blob/bb04be114b486479bf1e03e4d7533ef887436450/src/ui/list.tsx#L95-L112
 📝改善Commit - [feat: useMemoによってthemeの切り替えでは遅延は起こらなくなった](https://github.com/saku-1101/hooks-demo-app/commit/43835bd5430f82a5f0fe25dbadd1f18c7ba20fb6#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 
+![demoアプリ](/images/usememo.gif)
 これで、少なくともテーマ変更時(theme state変更時)に遅延が起こるということは無くなりました！👏🏻
 
 ### `useCallback`を使って関数をキャッシュする
@@ -270,6 +272,7 @@ https://github.com/facebook/react/blob/29fbf6f62625c4262035f931681c7b7822ca9843/
 `useCallback`と`memo`の関係を理解したところで、以下のバグを改善していきましょう！❤️‍🔥
 
 以下のコミットでは、レンダーの度に0.5秒間の遅延が発生する`MechaOsoiListItem`を仕込みました。改悪により、メモのレンダーに本質的には関係ないテーマの変更でも遅延が発生することがわかります。
+![demoアプリ](/images/usecallback-prev.gif)
 🐛改悪Commit - [chore: 人為的にメモを表示するときに遅延させる](https://github.com/saku-1101/hooks-demo-app/commit/1464a8e41209eb3f334771a7455fe3d761f4c1dd#diff-427031f7e98419706622e4274aa267fd6278e4f3f9f4bf8505b4fc79de74c7e4)
 
 `useCallback`と`memo`を用いて`MechaOsoiListItem`コンポーネントの最適化をします。
@@ -277,6 +280,7 @@ https://github.com/facebook/react/blob/29fbf6f62625c4262035f931681c7b7822ca9843/
 https://github.com/saku-1101/hooks-demo-app/blob/bb04be114b486479bf1e03e4d7533ef887436450/src/ui/list-item.tsx#L5-L24
 次に、`MechaOsoiListItem`に渡る関数`props`を`useCallback`を用いてキャッシュします。
 https://github.com/saku-1101/hooks-demo-app/blob/bb04be114b486479bf1e03e4d7533ef887436450/src/ui/list.tsx#L37-L58
+![demoアプリ](/images/usecallback.gif)
 📝改善Commit - [feat: useCallbackとmemoによってコンポーネントのメモ化(useCallback使用部分)](https://github.com/saku-1101/hooks-demo-app/commit/caeed10f4aeef808b93c4f681af88bbc2243fc28#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 📝改善Commit - [feat: useCallbackとmemoによってコンポーネントのメモ化(memo使用部分)](https://github.com/saku-1101/hooks-demo-app/commit/caeed10f4aeef808b93c4f681af88bbc2243fc28#diff-427031f7e98419706622e4274aa267fd6278e4f3f9f4bf8505b4fc79de74c7e4)
 
@@ -301,10 +305,12 @@ UIには反映されない値の代表として、
 
 今回は`ref`を使用してtimerIDを管理し、タイマー機能を追加してみます。⏳
 まず、正常な挙動をしないタイマーのコミットです。startボタンを押せば押すほどタイマーが生成され、カウントダウンが早くなります。
+![demoアプリ](/images/bugtimer.gif)
 🐛バグCommit - [chore: 複数のタイマーが同時に起動してしまうコンポーネント(startを押すほどカウントダウンが早くなる)](https://github.com/saku-1101/hooks-demo-app/commit/7ec4f66a6cf757843dfcbefe240d0b4828fbabae#diff-79aa0e105b07134a836fa8f5f7228226ded60539123a9a755b5ce850fbe50cbe)
 
 `useRef`で生成した`ref`を使用してtimerIDを管理し、正常にタイマー機能を動作させましょう！🏋🏻
 https://github.com/saku-1101/hooks-demo-app/blob/829baf1beb316fd60a286ffacf6fba55e91566c0/src/ui/timer.tsx#L4-L32
+![demoアプリ](/images/timer.gif)
 📝改善Commit - [feat: 正常タイマー:常に一つのタイマーしか存在しない](https://github.com/saku-1101/hooks-demo-app/commit/829baf1beb316fd60a286ffacf6fba55e91566c0#diff-79aa0e105b07134a836fa8f5f7228226ded60539123a9a755b5ce850fbe50cbe)
 
 これで、タイマー機能が追加され、デモアプリケーションが完成しました🎉
@@ -321,7 +327,132 @@ Reactの状態の重要性について理解したのち、広く浅くHooksに�
 間違った理解や記述があった箇所は教えていただけるととっても嬉しいです🐣
 :::
 
-## おまけ　- ちょっとよくないuseEffect
+## おまけ　- 避けたいuseEffectの使用方法
+今回のメモアプリでは❤️(marked)、🩶(unmarked)、🧹(全表示)でメモの出しわけができるフィルター機能を追加しました。その際に、フィルターされるメモをどのように管理するのかを考えます。
+以下の`filterMemos`関数に着目すると、`setFilteredMemos`で再レンダーをトリガーして`filteredMemos`stateを変更することで、メモの出しわけを行なっています。memosのstate変更はCRUD処理のイベントハンドラからも行われるため、`memos`の値が更新されたときに`filteredMemos`の値が更新されるようにするため、以下では`useEffect`を使用してメモの変更を反映しています。
 
-🐛改悪Commit - [chore: ちょっとよくないuseEffect](https://github.com/saku-1101/hooks-demo-app/commit/01e5f46018264808809a87ddcdcc5e2af5974644#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
+しかし、この書き方だと、`handleAddMemo`でmemoを追加したときに`memos` stateを更新するための`dispatch`によるレンダリングと、`memos` stateが変わったときに`filteredMemos`を更新するために発火する`useEffect`内の`setFilteredMemos`により２回のレンダリングが行われてしまいます。
+メモを追加するだけでレンダリングが2回起こるということは、特別な理由がない限り避けたい方法です。
+:::details 避けたいパターン
+```ts
+export function MemoListPresenter() {
+  const ref = useRef<HTMLInputElement>(null);
+  const { memos, asyncDispatch } = useMemosContext();
+  const [filteredMemos, setFilteredMemos] = useState<Memo[]>(memos);
+  const { theme } = useThemeContext();
+
+  // 🤔よくあるパターン
+  // レンダリングを効率的に活かせていない
+  // handle...によるレンダリングが発生するたびに、
+  // useEffectによるレンダリングも発生する
+  useEffect(() => {
+    setFilteredMemos(memos);
+  }, [memos]);
+
+  async function handleAddMemo(title: Memo["title"]) {
+    asyncDispatch(
+      // add apiを叩く
+              ...
+        dispatch({ type: "add", payload: addedMemo });
+      }
+    );
+  }
+
+
+  function filterMemos(which: "marked" | "unmarked" | "all") {
+    if (which === "marked") {
+      setFilteredMemos(memos.filter((memo) => memo.marked));
+    } else if (which === "unmarked") {
+      setFilteredMemos(memos.filter((memo) => !memo.marked));
+    } else {
+      return setFilteredMemos(memos);
+    }
+  }
+
+  return (
+    <main className="flex flex-col justify-center items-center gap-5">
+        ...
+         <div className="flex justify-end">
+            <Button icon={"❤️"} onClick={() => filterMemos("marked")} />
+            <Button icon={"🩶"} onClick={() => filterMemos("unmarked")} />
+            <Button icon={"🧹"} onClick={() => filterMemos("all")} />
+          </div>
+          ...
+            {filteredMemos.map((memo) => {
+              return (
+                <ListItem
+                  key={memo.id}
+              ...
+                />
+              );
+            })}
+        ...
+    </main>
+  );
+}
+```
+:::
+🐛Commit - [chore: ちょっとよくないuseEffect](https://github.com/saku-1101/hooks-demo-app/commit/01e5f46018264808809a87ddcdcc5e2af5974644#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
+
+その代わりに、**イベントハンドラでトリガーされるレンダーを利用して`filterMemos`で出力するstateを計算するようにします。**
+上の例のような**stateの変更に基づいて別のstateを更新するという操作は一般的には避けることができ、既存のpropsやstateからレンダー中に計算することができます。**
+:::details レンダー中にfilteredMemosを計算する
+```diff ts
+export function MemoListPresenter() {
+  const ref = useRef<HTMLInputElement>(null);
+  const { memos, asyncDispatch } = useMemosContext();
++  const [filter, setFilter] = useState<"marked" | "unmarked" | "all">("all");
+-  const [filteredMemos, setFilteredMemos] = useState<Memo[]>(memos);
+  const { theme } = useThemeContext();
+
+-  useEffect(() => {
+-    setFilteredMemos(memos);
+-  }, [memos]);
+
+  async function handleAddMemo(title: Memo["title"]) {
+    asyncDispatch(
+    　　　// add apiを叩く
+              ...
+        dispatch({ type: "add", payload: addedMemo });
+      }
+    );
+  }
+
+  function filterMemos(which: "marked" | "unmarked" | "all") {
+    if (which === "marked") {
+      return memos.filter((memo) => memo.marked);
+    } else if (which === "unmarked") {
+      return memos.filter((memo) => !memo.marked);
+    } else {
+      return memos;
+    }
+  }
+
+  return (
+    <main className="flex flex-col justify-center items-center gap-5">
+        ...
+          <div className="flex justify-end">
+            <Button icon={"❤️"} onClick={() => setFilter("marked")} />
+            <Button icon={"🩶"} onClick={() => setFilter("unmarked")} />
+            <Button icon={"🧹"} onClick={() => setFilter("all")} />
+          </div>
+        ...
+            {/* handle...によりレンダリングがトリガーされるタイミングを利用して
+            filterMemosで出力するstateを計算する */}
+            {/* ✅ レンダリングを効率的に活かせる！ */}
+            {filterMemos(filter).map((memo) => {
+              return (
+                <ListItem
+                  key={memo.id}
+              ...
+                />
+              );
+            })}
+        ...
+    </main>
+  );
+}
+
+```
+:::
 📝改善Commit - [feat: フィルタリング機能](https://github.com/saku-1101/hooks-demo-app/commit/f0a0238fb830852f88758504e38def07c3ea3428#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
