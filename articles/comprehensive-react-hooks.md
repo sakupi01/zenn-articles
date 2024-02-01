@@ -22,7 +22,7 @@ Reactと状態は切っても切れない関係です。なぜなら、Reactは�
 https://github.com/saku-1101/hooks-demo-app
 ![demoアプリ](/images/memoapp.gif)
 ## 【序章】フックとレンダーとコミットとstate
-フックとは、そもそも何なのでしょうか？
+そもそもフックとは何なのでしょうか？👀
 Reactの公式ドキュメントにはきちんと明文化されています。
 
 > React では、useState やその他の use で始まる関数はフック (Hook) と呼ばれます。
@@ -30,17 +30,19 @@ Reactの公式ドキュメントにはきちんと明文化されています。
 
 Learn React - [はじめてのフック](https://ja.react.dev/learn/state-a-components-memory#meet-your-first-hook)
 
-では、ここでいう**レンダーされている間**とはどの期間を指すものなのでしょうか？👀
+では、ここでいう**レンダーされている間**とはどの期間を指すものなのでしょうか？🤔
 
 ### レンダーとコミット
 まず、「レンダーされている間」を捉えるために、コンポーネントが画面表示されるまでのプロセスを理解したいです。
 
-コンポーネントはライフサイクル(マウント→アップデート→アンマウント)の最初のステップである「マウント」がなされる前に、まずReactによって**レンダー**される必要があります。
+コンポーネントはライフサイクル(マウント→アップデート→アンマウント)の最初のステップである「マウント」がなされる前に、まずReactによって**レンダーされてコミットされる**必要があります。
+![レンダーとコミット](images/renderandcommit.png)
+*出典 - Learn React*
 
 レンダーとは、**コンポーネントが画面表示される際に必要なプロセスの一つであり、コンポーネントがReactアプリから呼び出されることです。**
 コンポーネントが呼び出される（レンダーがトリガーされる）原因は大きく２つあります。
-1. コンポーネントの初回レンダー(ReactはRootコンポーネントを呼び出す)
-2. コンポーネントまたはその祖先のset関数によるstateの更新(Reactはset関数が使用されたコンポーネントを呼び出す)
+1. コンポーネントの**初回レンダー**(Reactは**Rootコンポーネントを呼び出す**)
+2. コンポーネントまたはその祖先の**set関数によるstateの更新**(Reactは**set関数が使用されたコンポーネントを呼び出す**)
 
 画面に表示(ブラウザレンダリング)される前に,レンダーによって表示・更新するコンポーネントを決めているということですね！
 
@@ -61,7 +63,7 @@ Reactは呼び出し(レンダー)に差異があった場合にのみ，DOMを�
 以下の図のように、set関数がトリガーとなって、新しいstateを持ったコンポーネントがレンダーされます。
 こうして情報の上書きはされずに再レンダーがトリガーされて新たなstateを持ったコンポーネントが出来上がるような振る舞いなので、Reactではこれを**コンポーネントのスナップショットを撮る**と表現しています。📸
 ![レンダーとstate](/images/renderandstate.png)
-*参考 - Learn React - [state 更新後の再レンダー](https://ja.react.dev/learn/render-and-commit#re-renders-when-state-updates)*
+*出典 - Learn React - [state 更新後の再レンダー](https://ja.react.dev/learn/render-and-commit#re-renders-when-state-updates)*
 
 こうして生成されるstateを利用して、そのJSX内のprops、EventHandler、ローカル変数などが計算されます。
 
@@ -94,9 +96,10 @@ stateはReactを理解する上で最も理解しておきたい機能(自分調
 
 そんなuseEffectを使用して初期メモデータをフェッチしましょう！🏄🏻
 
-:::details 詳細の実装と説明
-
-:::
+`useEffect`の基本的な使用方法に関する説明は他の記事に譲りますが、初期データフェッチということで`useEffect`の第二引数である依存配列には何もリアクティブな値を入れていません。
+「依存配列が空＝レンダリングの前後で比較するものがない＝最初しか実行されない」ということを利用して初期データフェッチを行うためです。
+(※`didInit`は開発モードで2回レンダリングが起こることへの対応です)
+https://github.com/saku-1101/hooks-demo-app/blob/2bf2f9636e0e53f15c6813c1599a83d7881a2402/src/MemoListContainer.tsx#L5-L27
 これで初期メモデータを取得して表示できるようになりました！
 
 ## useStateでレンダー間でstateを管理しよう
@@ -106,7 +109,32 @@ stateはReactを理解する上で最も理解しておきたい機能(自分調
 画面を更新するためには、レンダーをトリガーしますが、前のスナップショットの結果を記憶しつつ次のスナップショットを撮らねばなりません。
 そこで、`useState`を使用してレンダー間でstateを共有しつつ、コンポーネントのレンダーをトリガーしてUIを更新しましょう！
 :::details 詳細の実装と説明
+まず、メモの表示を行う`MemoListPresenter`にmemos stateとmemos set関数を渡します。`MemoListPresenter`がmemos stateを読み、set関数でレンダーをトリガーしてスナップショットを撮ることができるようにするためです。
+```diff ts
+function MemoListContainer() {
+  const [memos, setMemos] = useState<Memo[]>([]);
+  useEffect(() => {
+    if (didInit) return;
+    const fetchData = async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/memos`
+      );
+      const data = await response.json();
+      return data;
+    };
 
+    // ✅ fetchData()はアプリケーションの初期化時に一度だけ実行される
+    fetchData()
+      .then((memos: Memo[]) => setMemos(memos))
+      .catch(console.error);
+    didInit = true;
+  }, []);
+-  return <MemoListPresenter />;
++  return <MemoListPresenter memos={memos} setMemos={setMemos} />;
+}
+```
+`MemoListPresenter`の`handleAddMemo`では、バックエンドとのデータ更新処理を行い、その結果を渡されたset関数を用いて再レンダーをトリガーすることでフロントエンドUIに反映しています。同ファイルの`handleUpdateMemoState`, `handleUpdateMemoTitle`, `handleDeleteMemo`でも同じ手順のことをやっています。
+https://github.com/saku-1101/hooks-demo-app/blob/4d974f66fe8b728986e2e0b7b976138449078f25/src/ui/list.tsx#L6-L26
 :::
 これで、メモのCRUD処理の結果をUIと同期させることができました！🫶🏻
 
