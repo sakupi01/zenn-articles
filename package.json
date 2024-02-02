@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@textlint/textlint-plugin-markdown": "^13.4.1",
-    "zenn-cli": "^0.1.150"
+    "zenn-cli": "^0.1.152"
   },
   "devDependencies": {
     "textlint": "^13.4.1",
