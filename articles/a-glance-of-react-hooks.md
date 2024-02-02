@@ -454,7 +454,7 @@ export function MemoListPresenter() {
 📝改善Commit - [feat: フィルタリング機能](https://github.com/saku-1101/hooks-demo-app/commit/f0a0238fb830852f88758504e38def07c3ea3428#diff-faf44dda17f06c640ccc8cac9d594cabf901254e1dacddecd0d6154171328a9e)
 
  
-(さらに改善✨)「`filteredMemo`は`useMemo`を使用することえ発火タイミングの意図を共有しやすくできます」
+(さらに改善✨)「`filteredMemo`は三項演算子や`useMemo`を使用することで発火のタイミングを共有しやすくできます」
 という[コメント](https://zenn.dev/link/comments/146c46cb489927)をいただいています。[@honey32](https://zenn.dev/honey32)さん、ありがとうございます！
 
 :::message
