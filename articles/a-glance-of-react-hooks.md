@@ -457,7 +457,6 @@ export function MemoListPresenter() {
 (さらに改善✨)「`filteredMemo`は`useMemo`を使用することえ発火タイミングの意図を共有しやすくできます」
 という[コメント](https://zenn.dev/link/comments/146c46cb489927)をいただいています。[@honey32](https://zenn.dev/honey32)さん、ありがとうございます！
 
-
 :::message
 間違った理解や記述があった箇所は教えていただけるととっても嬉しいです🐣
 :::
