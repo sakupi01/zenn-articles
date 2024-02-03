@@ -219,7 +219,7 @@ https://github.com/saku-1101/hooks-demo-app/blob/bb04be114b486479bf1e03e4d7533ef
 - `useMemo`
   - 重たい**関数の計算結果**・値・JSXをキャッシュするためのフック
 - `useCallback`
-  - 重たい**関数**をキャッシュするためのフック
+  - **関数**をキャッシュするためのフック
   - `memo`とよく使う
 - `memo`
   - **コンポーネント**をキャッシュするためのAPI
