@@ -15,3 +15,4 @@ $ npx zenn new:article --slug 記事のスラッグ --title タイトル --type 
 ```
 $ npx zenn preview # プレビュー開始
 ```
+npx zenn new:article --slug tskaigi-participation-record --title TSKaigi 2024に参加してきました --type tech --emoji ⌨️
