@@ -4,6 +4,7 @@ emoji: "🎉"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ['typescript','tskaigi']
 published: true
+publication_name: "cybozu_frontend"
 ---
 
 2024/5/11日に初開催された、TSKaigiに参加してきました。
