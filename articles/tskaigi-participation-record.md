@@ -81,7 +81,7 @@ log出力をみやすくカスタマイズができるライブラリ、pino紹�
 
 セッションでは、このような計算量を必要とする型を改善する有力な方法として、オーバーロードやインタフェースを工夫して回避する方法2つが挙げられていました。
 
-https://drive.google.com/file/d/16ibOO_a2y0AI7tv7yPWHcyV0sHlC4TZ9/view
+https://speakerdeck.com/ypresto/typescript-type-checking-and-its-performance
 
 今まで「遅いな〜」くらいで本質を理解していなかったtsserverにかかる具体的な計算量の話だけでなく、JS Profilerを用いたパフォーマンスに影響を与えている原因の特定など、非常に勉強になる内容でした。
 
