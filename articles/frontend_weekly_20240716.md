@@ -5,6 +5,7 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["CybozuFrontendWeekly", "frontend"]
 published: true
 publication_name: "cybozu_frontend"
+published_at: 2024-07-17 18:00 # 未来の日時を指定する
 ---
 
 こんにちは！サイボウズ株式会社フロントエンドエンジニアの[saku (@sakupi01)](https://x.com/sakupi01)です。
