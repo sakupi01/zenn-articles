@@ -75,7 +75,7 @@ https://blog.phylum.io/persistent-npm-campaign-shipping-trojanized-jquery/
 
 ESLintの今後についての記事です。
 
-FlatConfigの導入だけではなく、各言語プラグイン機能をサポートして現在以上に言語に依存しないリンターへ進化することや、Coreの完全な書き直しが行なわれ、より柔軟で現代的なツールとなるとのことです。
+FlatConfigの導入だけではなく、各言語プラグイン機能をサポートして現在以上に言語依存のないリンターへ進化することや、Coreの完全な書き直しが行なわれ、より柔軟で現代的なツールとなるとのことです。
 
 https://eslint.org/blog/2024/07/whats-coming-next-for-eslint/ 
 
