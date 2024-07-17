@@ -6,6 +6,7 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["react", "typescript", "javascript"]
 published: true
 ---
+<!-- textlint-disable -->
 Reactと状態は切っても切れない関係です。なぜなら、Reactは状態に基づいて画面を更新するコンポーネントベースのUIライブラリだからです🤝🏻
 
 そんなReactの状態を管理・操作しやすくしてくれているのが、React 16.8から登場したフックです。それゆえ、フックを正しく利用するにあたってReactの状態の理解は非常に重要であり、Reactの状態の理解があやふやだと、予期せぬ挙動やバグのもとになりかねません。

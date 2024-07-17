@@ -6,7 +6,7 @@ topics: ['typescript','tskaigi']
 published: true
 publication_name: "cybozu_frontend"
 ---
-
+<!-- textlint-disable -->
 2024/5/11日に初開催された、TSKaigiに参加してきました。
 
 https://tskaigi.org/

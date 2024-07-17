@@ -7,7 +7,7 @@ publication_name: "cybozu_frontend"
 published: true # trueを指定する
 published_at: 2023-12-10 11:00 # 未来の日時を指定する
 ---
-
+<!-- textlint-disable -->
 ※ この記事は [Cybozu Frontend Advent Calendar 2023](https://adventar.org/calendars/9255) の 10 日目の記事です。
 
 私が所属するReactoneチームでは、React + TypeScriptを用いて[kintoneのフロントエンド刷新](https://blog.cybozu.io/entry/2022/02/04/171154)を行なっています。
