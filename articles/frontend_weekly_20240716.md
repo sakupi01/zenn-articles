@@ -3,7 +3,7 @@ title: "Interop 2024の中間アップデートなど: Cybozu Frontend Weekly (2
 emoji: "🌻" # お好きな絵文字を
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["CybozuFrontendWeekly", "frontend"]
-published: false
+published: ture
 publication_name: "cybozu_frontend"
 published_at: 2023-07-17 17:00 # 未来の日時を指定する
 ---
