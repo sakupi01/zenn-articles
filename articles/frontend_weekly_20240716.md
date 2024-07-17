@@ -1,11 +1,11 @@
 ---
 title: "Interop 2024の中間アップデートなど: Cybozu Frontend Weekly (2024-07-16号)" # 目立ったニュースを選ぶ
-emoji: "💘" # お好きな絵文字を
+emoji: "🌻" # お好きな絵文字を
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["CybozuFrontendWeekly", "frontend"]
 published: true
 publication_name: "cybozu_frontend"
-published_at: 2023-07-17 17:30 # 未来の日時を指定する
+published_at: 2023-07-17 17:00 # 未来の日時を指定する
 ---
 
 こんにちは！サイボウズ株式会社フロントエンドエンジニアの[saku (@sakupi01)](https://x.com/sakupi01)です。
@@ -19,10 +19,10 @@ published_at: 2023-07-17 17:30 # 未来の日時を指定する
 # 取り上げた記事・話題
 
 ## MySQLデータベースエンジンでJSをサポート
-
-データベースエンジンそばにあらかじめまとまったクエリの処理などを登録しておき、必要に応じて呼び出すことでその処理を実行できるストアドプロシージャやストアドファンクションという機能の処理をJavaScriptで記述可能になります。
-
-MySQLのデータベースエンジン側でJavaScriptを実行する機能を提供しているのはGraalVM上で実装されてる[GraalJS](https://github.com/oracle/graaljs)です。
+<!-- textlint-disable -->
+データベースエンジン側にあらかじめまとまったクエリの処理などを登録しておき、必要に応じて呼び出すことでその処理を実行できるストアドプロシージャやストアドファンクションという機能の処理をJavaScriptで記述可能になります。
+<!-- textlint-enable -->
+MySQLのデータベースエンジン側でJavaScriptを実行する機能を提供しているのはGraalVM上で実装されている[GraalJS](https://github.com/oracle/graaljs)です。
 
 以下のように、`LANGUAGE JAVASCRIPT AS $$`とすることでSQLの中にストアドプログラムをJSで記述できるようになります。
 
@@ -49,7 +49,7 @@ Vitest2.0がリリースされました。
 実際のブラウザ環境でテストを実行し、ビューポートの変更、マウス操作のシミュレーション、スクリーンショットの取得、DOM要素の操作とアサーションなど、挙動を直接テストすることが可能になります。
 
 また、[forks(node:child_processベース)で実行やデバッグが安定しない懸念](https://github.com/vitest-dev/vitest/pull/5047)があったため、デフォルトをthreads(node:worker_threadsベース)にする変更が加わりました。
-threadsを使用することで、実行時間が多少遅くなる懸念はあるものの、安定性が向上することが期待されます。
+threadsを使用することで、実行時間が多少遅くなる懸念はあるものの、安定性が向上することが期待されるようです。
 
 https://github.com/vitest-dev/vitest/releases/tag/v2.0.0 
 
@@ -59,7 +59,7 @@ Interop2024の中間アップデートが公開されました。
 
 [2024/2にスタートしたInterop 2024](https://zenn.dev/cybozu_frontend/articles/few-2024-02-06#the-web-just-gets-better-with-interop-2024)の時点でのスコアは65だったのに対し、2024/6の時点でのスコアは75と、10ポイントの向上となりました。
 
-Popover APIがBaselineに追加されたことやFireFoxの`@property`を使ったカスタムプロパティへの貢献、Chromeの`font-size-adjust`やSafariの`text-wrap: balance`への貢献がスコア上昇に寄与しています。
+Popover APIがBaselineに追加されたことや、FireFoxの`@property`を使ったカスタムプロパティへの貢献、Chromeの`font-size-adjust`やSafariの`text-wrap: balance`への貢献がスコア上昇に寄与したようです。
 
 https://web.dev/blog/interop-2024-midyear
 
@@ -91,7 +91,7 @@ Google I/O 2024で注目されたフロントエンド技術についてまと�
 
 https://techblog.lycorp.co.jp/ja/20240709b 
 
-## Built-in AI
+### Built-in AI
 
 AIモデルをブラウザに組み込みむ機能の開発ついての発表です。組み込みAIがWeb標準として定義され、JSによって扱えるようになります。
 
@@ -112,10 +112,10 @@ https://io.google/2024/explore/24c82286-24fd-42b7-b5a8-bbe9c917cbe4/
 
 https://developer.chrome.com/docs/web-platform/prerender-pages 
 
-### ライブリージョンの正しい設定方法について
+## ライブリージョンの正しい設定方法について
 
-ライブリージョンがSSRされた要素や`display: none`のコンテナを使うと期待通りに機能しない問題に対して解決策を提案している記事です。
-ブラウザと支援技術の組み合わせも考慮して、正しいライブリージョンの設定方法について詳説されています。
+ライブリージョンが、SSRされた要素や`display: none`のコンテナを使うと機能しない現象に対して、理由と解決策を提案している記事です。
+ブラウザと支援技術（スクリーンリーダ）の組み合わせも考慮しての正しいライブリージョンの設定方法についても詳説されています。
 
 https://tetralogical.com/blog/2024/05/01/why-are-my-live-regions-not-working/ 
 
@@ -129,7 +129,7 @@ https://piccalil.li/blog/its-about-time-i-tried-to-explain-what-progressive-enha
 
 https://zenn.dev/cybozu_frontend/articles/think-about-pe 
 
-## RegExp quantifier should allow 2^53 - 1 
+## [JSC] RegExp quantifier should allow 2^53 - 1 
 
 WebKitのJavaScriptCoreは正規表現の量指定子で2^53 - 1までの大きな数値を使用できるようになり、ECMAScript仕様に完全に準拠する変更が加わりました。
 これにより、より柔軟な正規表現パターンの記述が可能となり、他のJavaScriptエンジンとの互換性も向上しました。
@@ -139,4 +139,5 @@ https://github.com/WebKit/WebKit/pull/30559
 
 # あとがき
 
-今回は、
+個人的には、Interop 2024の中間アップデートで主要ブラウザが貢献してきた新たなWeb標準に関する情報をまとめることができた週でした。
+今年の[Focus Areas](https://web.dev/blog/interop-2024#all_focus_areas_for_2024)となっているWebComponentsに関する新機能なども含めて、その他Baselineの動向にも注目したいです🤸🏻‍♀️
