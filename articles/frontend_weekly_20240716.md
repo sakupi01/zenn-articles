@@ -3,9 +3,8 @@ title: "Interop 2024の中間アップデートなど: Cybozu Frontend Weekly (2
 emoji: "🌻" # お好きな絵文字を
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["CybozuFrontendWeekly", "frontend"]
-published: ture
+published: true
 publication_name: "cybozu_frontend"
-published_at: 2023-07-17 17:00 # 未来の日時を指定する
 ---
 
 こんにちは！サイボウズ株式会社フロントエンドエンジニアの[saku (@sakupi01)](https://x.com/sakupi01)です。
@@ -61,7 +60,7 @@ Interop2024の中間アップデートが公開されました。
 
 Popover APIがBaselineに追加されたことや、FireFoxの`@property`を使ったカスタムプロパティへの貢献、Chromeの`font-size-adjust`やSafariの`text-wrap: balance`への貢献がスコア上昇に寄与したようです。
 
-https://web.dev/blog/interop-2024-midyear
+https://web.dev/blog/interop-2024-midyear?hl=en
 
 ## トロイの木馬化した改ざん版jQueryの脅威
 
@@ -95,7 +94,7 @@ https://techblog.lycorp.co.jp/ja/20240709b
 
 AIモデルをブラウザに組み込みむ機能の開発ついての発表です。組み込みAIがWeb標準として定義され、JSによって扱えるようになります。
 
-https://developer.chrome.com/docs/ai/built-in 
+https://developer.chrome.com/docs/ai/built-in?hl=en
 
 ### View Transitions API
 
@@ -110,7 +109,7 @@ https://io.google/2024/explore/8ae18b72-028e-4722-9a05-4a480048e629/
 
 https://io.google/2024/explore/24c82286-24fd-42b7-b5a8-bbe9c917cbe4/
 
-https://developer.chrome.com/docs/web-platform/prerender-pages 
+https://developer.chrome.com/docs/web-platform/prerender-pages?hl=en
 
 ## ライブリージョンの正しい設定方法について
 
