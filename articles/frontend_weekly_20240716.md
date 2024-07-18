@@ -48,8 +48,8 @@ Vitest2.0がリリースされました。
 ブラウザ上でテストが実行可能になるブラウザモードのサポートが追加されました。
 実際のブラウザ環境でテストを実行し、ビューポートの変更、マウス操作のシミュレーション、スクリーンショットの取得、DOM要素の操作とアサーションなど、挙動を直接テストすることが可能になります。
 
-また、[forks(node:child_processベース)で実行やデバッグが安定しない懸念](https://github.com/vitest-dev/vitest/pull/5047)があったため、デフォルトをthreads(node:worker_threadsベース)にする変更が加わりました。
-threadsを使用することで、実行時間が多少遅くなる懸念はあるものの、安定性が向上することが期待されるようです。
+また、[threads (node:worker_threadsベース)で実行やデバッグが安定しない懸念](https://github.com/vitest-dev/vitest/pull/5047)があったため、デフォルトをforks(node:child_processベース)にする変更が加わりました。
+forksを使用することで、実行時間が多少遅くなる懸念はあるものの、安定性が向上することが期待されるようです。
 
 https://github.com/vitest-dev/vitest/releases/tag/v2.0.0 
 
