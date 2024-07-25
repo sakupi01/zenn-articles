@@ -4,6 +4,7 @@ emoji: "🌈"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['Accessibility','Design','wcag']
 published: false
+publication_name: "cybozu_frontend"　# プレビュー機能を利用するために一時的に設定しています
 ---
 
 ※ この記事は [CYBOZU SUMMER BLOG FES '24](https://cybozu.github.io/summer-blog-fes-2024/) Design Stage の 2 日目の記事です。
