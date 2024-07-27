@@ -10,7 +10,7 @@ published_at: 2024-08-09 12:00 # 未来の日時を指定する
 
 ※ この記事は [CYBOZU SUMMER BLOG FES '24](https://cybozu.github.io/summer-blog-fes-2024/) Frontend Stageの9日目の記事です。
 
-# Practice Safe DSD with setHTMLUnsafe
+<!-- # Practice Safe DSD with setHTMLUnsafe -->
 
 [Interop 2024のFocus Areas](https://web.dev/blog/interop-2024?hl=ja#all_focus_areas_for_2024)となっているWeb Componentsに関する新機能の一つに、Declarative Shadow DOMがあります。
 
@@ -36,16 +36,44 @@ Shadow DOMは、[Web Components](https://developer.mozilla.org/ja/docs/Web/API/W
 
 Shadow DOMを使用することで、Webページの一部を隔離されたDOM（`#shadow-root`）としてレンダリングし、そこに対してのみスタイルや機能を適用することが可能になります。これにより、Webページ全体のスタイルや機能の影響を受けることなく、特定の部分だけを変更できます。
 
-Shadow DOMは以下のようにして作成することができます。
+
+### Shadow DOM の作成方法
+
+Web Componentsの文脈において、Shadow DOMは以下のようにして作成することができます。
 
 1. `customElements.define`を呼んでCustom Elementを定義
 2. `this.attachShadow({mode: 'open'})`でShadow DOMを作成し、要素に紐づける
 3. `shadowRoot.innerHTML`などでShadow DOMに要素を追加
 
 ```js:Shadow DOM作成の手順
-const shadowHost = document.getElementById('shadow-host');
-const shadowRoot = shadowHost.attachShadow({mode: 'open'});
-shadowRoot.innerHTML = '<p>🙈 This is Shadow DOM 🙈</p>';
+class ShadowHostCustomElement extends HTMLElement {
+  connectedCallback () {
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.innerHTML = `
+      <style>
+        h1 {
+          color: red;
+        }
+      </style>
+      <h1>🙈 This is Shadow DOM 🙈</h1>
+    `;
+  }
+}
+
+// Custom Elementを定義
+window.customElements.define("shadow-host-custom-element", ShadowHostCustomElement)
+```
+
+```html: レンダー後
+<shadow-host-custom-element>
+  #shadowRoot
+  <style>
+    h1 {
+      color: red;
+    }
+  </style>
+  <h1>🙈 This is Shadow DOM 🙈</h1>
+</shadow-host-custom-element>
 ```
 
 :::message
@@ -58,84 +86,72 @@ HTML要素の中には、Shadowツリーを紐づけることができない要�
 
 コンポーネント指向の開発において、Shadow DOMは非常に便利な技術ですが、以下のような点を考慮する必要がありました。
 
-- JSが使用できない環境では動作しない
+- JavaScriptが使用できない環境では動作しない
 - Web Componentsは遅延ロードされるため、Cumulative Layout Shift (CLS)を引き起こす可能性がある
-- Shadow DOMはクライアントサイドJSでのみサポートされており、サーバーサイドで記述できる構文が存在しないため、SSRができない
+- Shadow DOMはクライアントサイドJavaScriptでのみサポートされており、サーバーサイドで記述できる構文が存在しないため、SSRができない
 
-これらの問題は、主にShadow DOMがクライアントサイドJS環境でのみサポートされるWeb APIであることに帰結すると言えるでしょう。
+これらの問題は、Shadow DOMがクライアントサイドJavaScript環境でのみサポートされるWeb APIであることに帰結すると言えるでしょう。
 
 そこで登場したのが、Declarative Shadow DOMです。
 
 ## Declarative Shadow DOM is 何？
 
-**Declarative Shadow DOM is Shadow DOM without JS**です👏🏻
-
-Declarative Shadow DOM（以下DSD）によって、[ShadowRoot](https://developer.mozilla.org/en-US/docs/Web/API/ShadowRoot)をHTMLの中でブラウザに作成するように指示することができます。
-
-Declaretive Shadow DOMについてめっちゃまとまってた
-https://qiita.com/tronicboy/items/68f2d9ae1c93a9c3f2cb
-
-従来の作成方法
-① customElements.defineを呼んでCustom Elementを定義
-② this.attachShadow({mode: 'open'})でShadow DOMを作成し、要素に紐づける
-③ shadowRoot.innerHTMLなどでShadow DOMに要素を追加
+Declarative Shadow DOM is **Shadow DOM without JavaScript**です👏🏻
 
 ### Declarative Shadow DOM が解決したこと
 
-従来のShadow DOMの作成方法は、JavaScriptでShadowRootを作成し、その中に要素を追加する方法でした。
+[従来のShadow DOMの作成方法](#shadow-dom-の作成方法)は、JavaScriptでShadowRootを作成し、その中に要素を追加する方法でした。
 つまり、Webページを読み込んでそれがレンダーされてからやっとJavaScriptが実行され、Shadow DOMが生成されていました。
 
-しかし、Declarative Shadow DOMを使うと、HTMLの中でブラウザにShadow DOMを作るように指示することができます。これにより、JSのHydrationを待つことなく、Shadow DOMによって提供されるカプセル化やスタイルの適用ができ、CLSを引き起こすことなくコンポーネントをレンダリングすることが可能になります。
+しかし、DSDを使うと、ブラウザのレンダリングエンジンにShadow DOMを作るように指示することができます。
+これにより、Custom Elementの定義を含むJavaScriptのHydrationを待つことなく、Shadow DOMを構築できるようになります。加えて、CLSを引き起こさずにコンポーネントをレンダリングできたり、SEOの面でも恩恵を受けたりすることができます。
 
-加えて、含めたいスタイルシートもHTMLの中に記述できるため、Shadow DOMに部分的にCSSを適用することができます。
-レンダリングの観点からは、Shadow DOMの構造がHTMLの中に記述されることで、ブラウザがShadow DOMの構造を事前に把握できるため、SSRが叶います。（別にサーバ使ってないのにSSRって言っていいのか）
-つまり、サーバーサイドでShadow DOMを構築することで、SEO対策や初期レンダリングの高速化が可能になります。
+### Declarative Shadow DOM の使い方
 
-Declarative Shadow DOMを使用したWeb Componentsの作成方法
-① Web Componentsのカスタム要素を定義
-② <template>要素を使ってShadow DOMの構造を定義
-③ <template>要素のshadowrootmode属性にopenを指定
-④ <template>要素の中にShadow DOMに追加したい要素を記述
-⑤ <template>要素をカスタム要素の中に配置
+DSDを使用すると、以下のようにShadow DOMを作成することができます。
 
-```html
+1. Web Componentsのカスタム要素を定義
+2. `<template>`要素を使ってShadow DOMの構造を定義
+3. `<template>`要素のshadowrootmode属性にopenを指定
+4. `<template>`要素の中にShadow DOMに追加したい要素を記述
+
+```html: Declarative Shadow DOMの使い方
   <body>
-    <my-comment-component>
+    <shadow-host-custom-element>
       <template shadowrootmode="open">
-        <link rel="stylesheet" href="style.css">
-        <h2>Comment From User</h2>
-        <p>This product is great. I use it all the time.</p>
+        <style>
+          h1 {
+            color: red;
+          }
+        </style>
+        <h1>🙈 This is Shadow DOM 🙈</h1>
       </template>
-    </my-comment-component>
+    </shadow-host-custom-element>
   </body>
-
-  <script>
-    class MyCommentComponent extends HTMLElement {
-      connectedCallback() {
-        console.log("Shadow Root: ", this.shadowRoot);
-
-        const h = this.shadowRoot.querySelector('h2');
-        h.style.color = 'red';
-      }
-    }
-
-    customElements.define("my-comment-component", MyCommentComponent);
-  </script>
 ```
 
-とかこことか読んでみる
-https://www.konnorrogers.com/posts/2023/what-is-declarative-shadow-dom#why-is-this-important
-https://www.wiktorwisniewski.dev/blog/exploring-declarative-shadow-dom#rescue
+試しに、JavaScriptを無効化した環境でShadow DOMが構築されるか確認してみます👀
+
+<!-- githubのリンクと動画を貼る -->
+
+[従来のShadow DOMの作成方法](#shadow-dom-の作成方法)でやっていた、JavaScriptでShadowRootを作成したり、要素を追加する手順がHTMLで完結していますね！
+
+## `setHTMLUnsafe`・`parseHTMLUnsafe`でShadow DOMに動的コンテンツを追加する
+
+`setHTMLUnsafe`や`parseHTMLUnsafe`を使うことで、動的コンテンツをShadow DOMに追加することができます。
+
+将来的には`setHTML`や`parseHTML`のサポート。
+https://www.mitsue.co.jp/knowledge/blog/frontend/202407/04_0815.html
 
 ## Declarative Shadow DOM の使いどころ
+
 [Maybe you don't need Declarative Shadow DOM at all?](https://www.wiktorwisniewski.dev/blog/exploring-declarative-shadow-dom#javascript)
 
-## `setHTMLUnsafe`や`parseHTMLUnsafe`を使ってShadow DOMに動的コンテンツを追加する
-`setHTMLUnsafe`や`parseHTMLUnsafe`を使うことで、動的コンテンツをShadow DOMに追加することができます。
 https://developer.chrome.com/blog/new-in-chrome-124?hl=ja#dsd
 https://thathtml.blog/2024/01/dsd-safety-with-set-html-unsafe/
 
 ## Web Components ってなんで欲しかったんだ？
+
 ![alt text](image-1.png)
 React/Vue/Angularでも良いのでは？
 他のライブラリに依存せずに、web標準でコンポーネントを作成できる
@@ -152,6 +168,8 @@ https://www.docswell.com/s/jxck/5246NN-1st-year-of-webcomponents-v4#p24
 
 ## まとめ
 
+DSDを使用することで、Progressive EnhancementなWeb Componentsの構築に近づきました。
+Web Componentを構成するCustom Elementの登録がまだ宣言的ではない（Proposalはある：https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md）
 
 https://web.dev/blog/interop-2024?hl=ja#declarative-shadow-dom
 https://developer.mozilla.org/ja/docs/Web/API/Web_components/Using_shadow_DOM
@@ -166,3 +184,6 @@ https://html.spec.whatwg.org/multipage/dynamic-markup-insertion.html#unsafe-html
 https://blog.jxck.io/entries/2023-01-07/new-css-capabilities-for-component.html
 https://speakerdeck.com/uhyo/shadow-domtocssnoxian-zhuang
 https://www.docswell.com/s/jxck/5246NN-1st-year-of-webcomponents-v4#p11
+https://qiita.com/tronicboy/items/68f2d9ae1c93a9c3f2cb
+https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md
+https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Shadow-DOM.md
