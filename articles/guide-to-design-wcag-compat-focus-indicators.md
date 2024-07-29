@@ -105,7 +105,7 @@ Web AIM(Accessibility in Mind)のチェックリストには、フリーハン�
 
 - 【ユーザー視点】スタイルがコンテンツ制作者によって独自に実装されているため、ユーザーは視覚的な調和が保たれたコンテンツを楽しむことができる
 - 【開発者視点】独自にフォーカスインジケータの外観をデザインし、十分に検証することで、サイトとのコントラスト比を基準以上に保つことが可能になる
-  - ブラウザデフォルトのフォーカスインジケータを使用する場合、背景色によってはコントラスト比が3:1の基準を満たせない場合がある
+  - ブラウザデフォルトのフォーカスインジケータを使用する場合、[背景色によってはコントラスト比が3:1の基準を満たせない場合](https://www.sarasoueidan.com/blog/focus-indicators/#examining-(current)-browser-focus-indicators-against-wcag-requirements)がある
   - → WCAG達成基準(1.4.11, 2.4.13 など)に沿った独自のフォーカスインジケータを実装し、正当な手段をもって検証することで、基準を満たした外観(コントラスト比)を保証できる
     - e.g. [多くの場合での基準を充足が期待されるフォーカスインジケータの独自実装例 - A ‘universal’ focus indicator](https://www.sarasoueidan.com/blog/focus-indicators/#a-%E2%80%98universal%E2%80%99-focus-indicator)
 
