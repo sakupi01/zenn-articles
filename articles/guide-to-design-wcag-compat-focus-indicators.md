@@ -100,19 +100,23 @@ Web AIM(Accessibility in Mind)のチェックリストには、フリーハン�
 ### メリット
 
 - 【ユーザー視点】スタイルがコンテンツ制作者によって独自に実装されているため、ユーザーは視覚的な調和が保たれたコンテンツを楽しむことができる
-- 【開発者視点】デフォルトでfocusableでない要素にフォーカスを与えたり、フォーカスの順序をカスタマイズしたりできる
-  - SVGアイコンなど視覚的にはボタンやリンクに見えないが、インタラクティブな機能を持つ要素にフォーカスを実装できる
-  - カスタムのドロップダウンメニューやダイアログなどを作成する際にキーボードナビゲーションをより細かく制御できる
-  - 複雑なフォームやウィザードのようなUIでユーザーの入力フローを最適化できる
+- 【開発者視点】独自にフォーカスインジケータの外観をデザインし、十分に検証することで、サイトとのコントラスト比を基準以上に保つことが可能になる
+  - ブラウザデフォルトのフォーカスインジケータを使用する場合、背景色によってはコントラスト比が3:1の基準を満たせない場合がある
+  - → WCAG達成基準（1.4.11, 2.4.13 など）に沿った独自のフォーカスインジケータを実装し、正当な手段を以て検証することで、基準を満たした外観（コントラスト比）を保証できる
+    - e.g. [多くの場合での基準を充足が期待されるフォーカスインジケータの独自実装例 - A ‘universal’ focus indicator](https://www.sarasoueidan.com/blog/focus-indicators/#a-%E2%80%98universal%E2%80%99-focus-indicator)
 
 ### デメリット
 
 - 【ユーザー視点】実装方法によっては、現在フォーカスが置かれている場所を特定できず、操作に支障が出る可能性がある
   - 【開発者視点】操作に反応する要素を特定する実装を独自に行なう場合、本来フォーカスが置かれるべき場所を網羅しており、利用者の操作に支障が出ていないのか測る手段が必要となる
-- 【開発者視点】WCAG達成基準(2.4.11, 2.4.12, 2.4.13)の例外対象とならないので、達成基準に沿った実装となっているか慎重な検討・実装が必要となる
+- 【開発者視点】WCAG達成基準（1.4.11, 2.4.11, 2.4.12, 2.4.13 など）の例外対象とならないので、達成基準に沿った実装となっているか慎重な検討・実装が必要となる
+  - フォーカスを受ける要素全てにおいて、ライトモード・ダークモードや各ページごとに上記基準を満たしていることを検証する手段が必要となり、実装に手間がかかる
+    - → デフォルトではブラウザデフォルトのフォーカスインジケータを有効とし、一部達成基準を満たさない箇所において、独自のフォーカスインジケータを実装するといった方法も考えられる（[参考 - Visual Focus Best Practices](https://www.boia.org/blog/what-you-need-to-know-about-visual-focus-and-accessibility)）
 
 :::message
+
 #### Google Chromeのクイックフォーカスハイライトを使用する
+
 Google Chrome96以降を使用しているユーザーに関しては、[クイック フォーカス ハイライト](https://support.google.com/chromebook/answer/177893?hl=ja)を有効にすると、アクティブな要素に追加のフォーカスインジケータが表示されます。
 重要な点は、**ページのユーザーCSSでフォーカススタイルが無効になっていても、このインジケーターが表示される**ことです。
 
@@ -144,4 +148,5 @@ Google Chrome96以降を使用しているユーザーに関しては、[クイ�
 - [フォーカスの概要  |  Articles  |  web.dev](https://web.dev/articles/focus?hl=ja)
 - [キーボード フォーカス  |  web.dev](https://web.dev/learn/accessibility/focus?hl=ja)
 - [Google Developers Japan: Chrome のフォーム コントロールとフォーカスのアップデート](https://developers-jp.googleblog.com/2020/04/chrome_7.html)
+- [Examining (current) browser focus indicators against WCAG requirements](https://www.sarasoueidan.com/blog/focus-indicators/#examining-(current)-browser-focus-indicators-against-wcag-requirements)
 - [A guide to designing accessible, WCAG-conformant focus indicators](https://www.sarasoueidan.com/blog/focus-indicators/#browser-default-focus-indicators)
