@@ -7,7 +7,9 @@ published: false
 publication_name: "cybozu_frontend" # プレビュー機能を利用するために一時的に設定しています
 ---
 
-※ この記事は [CYBOZU SUMMER BLOG FES '24](https://cybozu.github.io/summer-blog-fes-2024/) Design Stageの2日目の記事です。
+:::message
+この記事は、[CYBOZU SUMMER BLOG FES '24](https://cybozu.github.io/summer-blog-fes-2024/) (Design Stage) DAY 2の記事です。
+:::
 
 サイボウズの[kintone Design System Team](https://blog.cybozu.io/entry/2022/03/16/141935)（通称: kDS）では、kintoneのユーザー体験を最高にするための活動の一部として、共通コンポーネントの作成やそれに関するドキュメントの整備などを行なっています。
 
