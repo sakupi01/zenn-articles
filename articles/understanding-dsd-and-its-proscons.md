@@ -8,7 +8,9 @@ published: true # trueを指定する
 published_at: 2024-08-09 12:00 # 未来の日時を指定する
 ---
 
-※ この記事は [CYBOZU SUMMER BLOG FES '24](https://cybozu.github.io/summer-blog-fes-2024/) Frontend Stageの9日目の記事です。
+:::message
+この記事は、[CYBOZU SUMMER BLOG FES '24](https://cybozu.github.io/summer-blog-fes-2024/) (Frontend Stage) DAY 9の記事です。
+:::
 
 <!-- # Practice Safe DSD with setHTMLUnsafe -->
 
@@ -138,7 +140,41 @@ DSDを使用すると、以下のようにShadow DOMを作成することがで�
 
 ## `setHTMLUnsafe`・`parseHTMLUnsafe`でShadow DOMに動的コンテンツを追加する
 
+innerHTML や DOMParser との比較です
+
 `setHTMLUnsafe`や`parseHTMLUnsafe`を使うことで、動的コンテンツをShadow DOMに追加することができます。
+
+宣言型 Shadow DOM は HTML パーサーの機能です。つまり、宣言型シャドウルートは、HTML 解析中に存在する shadowrootmode 属性を持つ <template> タグに対してのみ解析され、添付されます。つまり、宣言型シャドウルートは最初の HTML 解析時に構築できます。
+
+
+<some-element>
+  <template shadowrootmode="open">
+    shadow root content for some-element
+  </template>
+</some-element>
+<template> 要素の shadowrootmode 属性を設定しても何も行われず、テンプレートは通常のテンプレート要素のままです。
+
+
+const div = document.createElement('div');
+const template = document.createElement('template');
+template.setAttribute('shadowrootmode', 'open'); // this does nothing
+div.appendChild(template);
+div.shadowRoot; // null
+セキュリティ上の重要な考慮事項を回避するため、宣言型シャドールートは、innerHTML や insertAdjacentHTML() などのフラグメント解析 API を使用して作成することもできません。宣言型シャドウルートが適用された HTML を解析する唯一の方法は、setHTMLUnsafe() または parseHTMLUnsafe() を使用することです。
+
+
+<script>
+  const html = `
+    <div>
+      <template shadowrootmode="open"></template>
+    </div>
+  `;
+  const div = document.createElement('div');
+  div.innerHTML = html; // No shadow root here
+  div.setHTMLUnsafe(html); // Shadow roots included
+  const newDocument = Document.parseHTMLUnsafe(html); // Also here
+</script>
+
 
 将来的には`setHTML`や`parseHTML`のサポート。
 https://www.mitsue.co.jp/knowledge/blog/frontend/202407/04_0815.html
@@ -187,3 +223,7 @@ https://www.docswell.com/s/jxck/5246NN-1st-year-of-webcomponents-v4#p11
 https://qiita.com/tronicboy/items/68f2d9ae1c93a9c3f2cb
 https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md
 https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Shadow-DOM.md
+
+> 宣言型 Shadow DOM は HTML パーサーの機能です。つまり、宣言型シャドウルートは、HTML 解析中に存在する shadowrootmode 属性を持つ <template> タグに対してのみ解析され、添付されます。つまり、宣言型シャドウルートは最初の HTML 解析時に構築できます。
+
+https://developer.chrome.com/docs/css-ui/declarative-shadow-dom?hl=ja
