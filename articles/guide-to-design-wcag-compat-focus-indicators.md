@@ -27,7 +27,7 @@ publication_name: "cybozu_frontend" # プレビュー機能を利用するため
 
 ただし、特定の状況やデザイン要件によっては例外が存在する可能性があります。そのため、必要に応じてカスタマイズされたフォーカスインジケータの使用を検討することも重要です。
 
-例外に関しては、主に[「②独自のフォーカスインジケータの特性 - メリット」の項目](#メリット-1)を参考にしてください。
+例外に関しては、特に[「①ブラウザデフォルトのフォーカスインジケータの特性 - デメリット」の項目](#デメリット)を参考にしてください。
 
 ## そもそもフォーカスとは
 
@@ -89,6 +89,7 @@ Web AIM(Accessibility in Mind)のチェックリストには、フリーハン�
 ### デメリット
 
 - 【ユーザー視点】スタイルがユーザーエージェントによってあらかじめ定まっているため、コンテンツ全体の見た目と調和しないフォーカスインジケータを受ける可能性がある
+- 【ユーザー・開発者視点】ブラウザデフォルトのフォーカスインジケータを使用する場合、[背景色によってはコントラスト比が3:1の基準を満たせない場合](https://www.sarasoueidan.com/blog/focus-indicators/#examining-(current)-browser-focus-indicators-against-wcag-requirements)がある
 
 ## ②独自のフォーカスインジケータの特性
 
@@ -105,9 +106,8 @@ Web AIM(Accessibility in Mind)のチェックリストには、フリーハン�
 
 - 【ユーザー視点】スタイルがコンテンツ制作者によって独自に実装されているため、ユーザーは視覚的な調和が保たれたコンテンツを楽しむことができる
 - 【開発者視点】独自にフォーカスインジケータの外観をデザインし、十分に検証することで、サイトとのコントラスト比を基準以上に保つことが可能になる
-  - ブラウザデフォルトのフォーカスインジケータを使用する場合、[背景色によってはコントラスト比が3:1の基準を満たせない場合](https://www.sarasoueidan.com/blog/focus-indicators/#examining-(current)-browser-focus-indicators-against-wcag-requirements)がある
   - → WCAG達成基準（1.4.11, 2.4.13など）に沿った独自のフォーカスインジケータを実装し、正当な手段をもって検証することで、基準を満たした外観（コントラスト比）を保証できる
-    - e.g. [多くの場合での基準を充足が期待されるフォーカスインジケータの独自実装例 - A ‘universal’ focus indicator](https://www.sarasoueidan.com/blog/focus-indicators/#a-%E2%80%98universal%E2%80%99-focus-indicator)
+    - e.g. [多くの場合で基準の充足が期待されるフォーカスインジケータの独自実装例 - A ‘universal’ focus indicator](https://www.sarasoueidan.com/blog/focus-indicators/#a-%E2%80%98universal%E2%80%99-focus-indicator)
 
 ### デメリット
 
