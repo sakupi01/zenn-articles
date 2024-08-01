@@ -5,7 +5,7 @@ type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["web", "typescript", "javascript"]
 publication_name: "cybozu_frontend"
 published: true # trueを指定する
-published_at: 2024-08-09 12:00 # 未来の日時を指定する
+published_at: 2024-08-09 17:30 # 未来の日時を指定する
 ---
 
 :::message
