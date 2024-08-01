@@ -3,8 +3,8 @@ title: "フォーカスインジケータの活用方針"
 emoji: "🌈"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['Accessibility','Design','wcag']
-published: false
-publication_name: "cybozu_frontend" # プレビュー機能を利用するために一時的に設定しています
+published: true
+published_at: 2024-08-02 17:30 # 未来の日時を指定する
 ---
 
 :::message
