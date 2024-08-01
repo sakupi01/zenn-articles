@@ -24,7 +24,7 @@ https://caniuse.com/?search=Declarative%20Shadow%20DOM
 
 https://webstatus.dev/features/parse-html-unsafe
 
-今回は、Declarative Shadow DOMとは何か、そして`setHTMLUnsafe`や`parseHTMLUnsafe`を使ってShadow DOMに動的コンテンツを追加する方法について紹介します🌼
+今回は、Declarative Shadow DOMとは何か、そして`setHTMLUnsafe`や`parseHTMLUnsafe`を使って動的にDeclarative Shadow DOMを追加する方法について紹介します🌼
 
 ## Shadow DOM is 何?
 Shadow DOMは、[Web Components](https://developer.mozilla.org/ja/docs/Web/API/Web_components#%E6%A6%82%E5%BF%B5%E3%81%A8%E4%BD%BF%E7%94%A8%E6%B3%95)を構成する技術の一部として、Webページから完全に隔離されたDOMツリー(Shadowツリー)とそれに関連するスタイルをScoped CSSとして定義するための技術です。
