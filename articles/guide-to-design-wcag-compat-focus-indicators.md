@@ -4,7 +4,7 @@ emoji: "🌈"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ['Accessibility','Design','wcag']
 published: true
-published_at: 2024-08-02 17:30 # 未来の日時を指定する
+published_at: 2024-08-02 11:45 # 未来の日時を指定する
 ---
 
 :::message
