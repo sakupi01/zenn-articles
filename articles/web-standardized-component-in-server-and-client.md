@@ -2,7 +2,7 @@
 title: "Declarative Shadow DOMを利用したWeb標準なコンポーネントをSSR・CSRで実現する"
 emoji: "🌓"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["frontend", "Web", "WebComponents", "DeclarativeShadowDOM", "CustomElements"]
+topics: ["frontend", "WebComponents", "DeclarativeShadowDOM", "CustomElements"]
 publication_name: "cybozu_frontend"
 published: true # trueを指定する
 published_at: 2024-08-09 17:30 # 未来の日時を指定する
@@ -14,7 +14,7 @@ published_at: 2024-08-09 17:30 # 未来の日時を指定する
 
 [Interop 2024のFocus Areas](https://web.dev/blog/interop-2024?hl=ja#all_focus_areas_for_2024)の1つに、[Web Components](https://wicg.github.io/webcomponents/)があります。このWeb Componentsに関連する機能として、[Declarative Shadow DOM](https://caniuse.com/?search=Declarative%20Shadow%20DOM)や[`setHTMLUnsafe`](https://caniuse.com/?search=setHTMLUnsafe)、[`parseHTMLUnsafe`](https://caniuse.com/?search=parseHTMLUnsafe)が2024年に入って新たにBaselineに追加されました。
 
-これらの機能・Web APIは、サーバーサイドでの宣言的なShadow DOMの構築によるプログレッシブエンハンスメントなWeb Componentsの実現に寄与したり、クライアントサイドでの動的なDeclarative Shadow DOMの追加によるWeb Componentsの利用範囲の拡大に貢献してくれています。
+これらの機能・Web APIは、サーバーサイドでの宣言的なShadow DOMの構築によるプログレッシブエンハンスメントなWeb Componentsの実現に寄与したり、クライアントサイドでの動的なDeclarative Shadow DOMの追加によるWeb Componentsの利用範囲の拡大に貢献したりしてくれています。
 
 今回は、このような盛り上がりを見せてくれているWeb Componentsが、Declarative Shadow DOMや`setHTMLUnsafe`・`parseHTMLUnsafe`の登場によってどのような進化を遂げているのか、具体例を交えながら理解していく記事です🌼
 
@@ -210,7 +210,7 @@ https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3
 しかし、DOM上はShadow DOMが構築されているため、変わらずCLSやSEOの面での恩恵を受けることができます。
 
 とはいえ、実用上は、イベント発火後などクライアントサイドで動的にDSDを追加したい場面もあります。
-DSDを使用することで、SSRでShadow DOMを構築できるようになりましたが、クライアントサイドJavaScriptを用いてDSDを追加する方法はあるのでしょうか？🤔
+DSDを使用することで、**SSRでShadow DOMを構築できるようになりましたが、クライアントサイドJavaScriptを用いてDSDを追加する方法**はあるのでしょうか？🤔
 
 ## `setHTMLUnsafe`・`parseHTMLUnsafe`で動的にDSDを追加する
 
@@ -218,7 +218,7 @@ DSDを使用することで、SSRでShadow DOMを構築できるようになり�
 
 まず、以下の`InnerHtmlDSDAddButton`で`innerHTML`を使用して、`body`に`HelloWorldDsdButton`を追加してみます。
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/client/index.tsx#L27-L59
+https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L29-L63
 
 しかし、`InnerHtmlDSDAddButton`ボタンを押してもDSDを用いたWeb Componentはレンダーされません。
 これは、セキュリティ上の理由から、`innerHTML`などのフラグメント解析APIはDSDをパースできないためです。
@@ -230,7 +230,7 @@ DSDを適用したHTMLを解析する唯一のWeb APIは、`setHTMLUnsafe`また
 `setHTMLUnsafe`は、`innerHTML`と同様にHTMLフラグメントの解析に加えて、DSDのパースもサポートしています。
 以下の`SetHtmlUnsafeDSDAddButton`では、`setHTMLUnsafe`で`HelloWorldDsdButton`を追加しています。
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L29-L63
+https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L10-L27
 
 `setHTMLUnsafe`を使用すると、DSDを含んだHTMLフラグメントが正しくパースされ、Shadow DOMが構築されていることが確認できます。(Chrome 127のExperimental Featuresフラグを有効化、Chrome Canaryで確認できました)
 
@@ -244,12 +244,11 @@ https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea7798
 > これらの API は両方とも安全ではありません。つまり、入力サニタイズを行いません。そのため、何を与えても安全であることを確認する必要があります。今後のリリースでは、入力のサニタイズを提供するバージョンを用意する予定です。
 > [Chrome 124 の新機能](https://developer.chrome.com/blog/new-in-chrome-124?hl=ja#dsd)
 
-まだWICGで検討段階の仕様ですが、将来的には`setHTMLUnsafe`や`parseHTMLUnsafe`が安全に使用できるよう改善されたり、`setHTML`や`parseHTML`といったデフォルトでサニタイズしてくれるAPIが提供される見込みがあります。
-参考: [Sanitization Explainer](https://github.com/WICG/sanitizer-api/blob/main/explainer.md)
+まだWICGで検討段階の仕様ですが、将来的には`setHTMLUnsafe`や`parseHTMLUnsafe`が安全に使用できるようAPIが改善されたり、`setHTML`や`parseHTML`といったデフォルトでサニタイズしてくれるAPIが提供される見込みがあります。[^1]
 
 ***
 
-このように、DSDを利用してWeb ComponentsをSSRしたり、`setHTMLUnsafe`・`parseHTMLUnsafe`を用いることで、クライアントサイドでも動的にDSDを追加することが可能になりました🎉
+このように、DSDを利用してWeb ComponentsをSSRしたり、`setHTMLUnsafe`・`parseHTMLUnsafe`を用いることでクライアントサイドでも動的にDSDを追加したりすることが可能になりました🎉
 
 ## まとめ
 
@@ -257,7 +256,8 @@ DSDを使用することで、従来のShadow DOMを用いたWeb Componentsの�
 
 また、`setHTMLUnsafe`や`parseHTMLUnsafe`を使用することで、動的にDSDを追加することが可能になり、Web Componentsは利用範囲の広がりを見せてくれました。
 
-とはいえ、動的に追加されるDSDの安全性への懸念、Custom Elementsの記述を宣言的にするDeclarative Custom ElementsやHTMLリソース（Custom Element、HTML Template、スタイルなど）をモジュールとしてexport/importするHTML Modulesに関する合意形成や実装など、まだまだ実用に至るには考慮すべき課題が残されているように感じます。
+とはいえ、動的に追加されるDSDの安全性への懸念とその解決策[^2]、Custom Elementsの記述を宣言的にするDeclarative Custom ElementsやHTMLリソース（Custom Element、HTML Template、スタイルなど）をモジュールとしてexport/importするHTML Modulesに関する合意形成や実装など[^3]、まだまだ実用に至るには考慮すべき事項が残されているようです。
+
 進化の目まぐるしいWeb Components、引き続き注目していきたいです💃🏻✨
 
 ## 参考
@@ -269,3 +269,7 @@ DSDを使用することで、従来のShadow DOMを用いたWeb Componentsの�
 [https://wicg.github.io/webcomponents/](https://wicg.github.io/webcomponents/)
 [https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555](https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555)
 [https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md)
+
+[^1]: [Sanitization Explainer](https://github.com/WICG/sanitizer-api/blob/main/explainer.md)
+[^2]: [Sanitization Explainer](https://github.com/WICG/sanitizer-api/blob/main/explainer.md)
+[^3]: [Declarative Syntax for Custom Elements](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md)、[HTML Modules and Declarative Custom Elements Proposal](https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555)や[declarative-custom-elementsに関してfileされたIssue](https://github.com/search?q=repo%3AWICG%2Fwebcomponents+declarative-custom-elements&type=issues)を参照
