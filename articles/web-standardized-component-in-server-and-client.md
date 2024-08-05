@@ -14,7 +14,7 @@ published_at: 2024-08-09 17:30 # 未来の日時を指定する
 
 [Interop 2024のFocus Areas](https://web.dev/blog/interop-2024?hl=ja#all_focus_areas_for_2024)の1つに、[Web Components](https://wicg.github.io/webcomponents/)があります。このWeb Componentsに関連する機能として、[Declarative Shadow DOM](https://caniuse.com/?search=Declarative%20Shadow%20DOM)や[`setHTMLUnsafe`](https://caniuse.com/?search=setHTMLUnsafe)、[`parseHTMLUnsafe`](https://caniuse.com/?search=parseHTMLUnsafe)が2024年に入って新たにBaselineに追加されました。
 
-これらの機能・Web APIは、サーバーサイドでの宣言的なShadow DOMの構築によるプログレッシブエンハンスメントなWeb Componentsの実現に寄与したり、クライアントサイドでの動的なDeclarative Shadow DOMの追加によるWeb Componentsの利用範囲の拡大に貢献したりしてくれています。
+これらの機能・Web APIは、サーバーサイドでの宣言的なShadow DOMの構築によるプログレッシブエンハンスメントなWeb Componentsの実現や、クライアントサイドでの動的なDeclarative Shadow DOMの追加によるWeb Componentsの利用範囲の拡大に寄与してくれています。
 
 今回は、このような盛り上がりを見せてくれているWeb Componentsが、Declarative Shadow DOMや`setHTMLUnsafe`・`parseHTMLUnsafe`の登場によってどのような進化を遂げているのか、具体例を交えながら理解していく記事です🌼
 
@@ -22,9 +22,9 @@ published_at: 2024-08-09 17:30 # 未来の日時を指定する
 
 端的に言うと、**Webページの構成要素をCustom Elementとして定義し、機能やスタイルがページ内の他の要素に影響を与えないように隔離したうえで、再利用可能なコンポーネントとして扱うための技術**です。
 
-一見すると、私たちが普段使っているReactやVue.jsなどのフレームワークでコンポーネント指向開発をするのと変わらないように思えます🤔
+一見すると、私たちが普段使っているReactやVue.jsなどのフレームワークでコンポーネント指向開発をするのと変わらないように思えるかもしれません🤔
 
-しかし、他フレームワークのコンポーネントとWeb Componentsの差分は、Web標準レベルでコンポーネントが定義されているかどうかという点にあります。
+しかし、他フレームワークのコンポーネントとWeb Componentsの差分は、Web標準レベルでコンポーネントが定義されるかどうかという点にあります。
 
 例えば、ReactのコンポーネントはWeb標準ではないので、使用するには必ずReactをインストールしている必要があります。しかし、Web ComponentsはWeb標準の技術のため、プラットフォームがWebであればいつでも使えて、ライブラリに依存しない、つまりライブラリ間で互換性のあるコンポーネントの開発が可能になるといえます。
 
@@ -44,15 +44,15 @@ https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a412
 
 ### Custom Elementsの問題点
 
-Custom Elementsとして要素を定義すると、上記のようにドキュメント内でそのコンポーネントが再利用可能になります。しかし、Custom Elementsだけでは、**スタイルや機能の隔離ができないため、他の要素に影響を与えてしまう可能性**があります。
+Custom Elementsとして要素を定義すると、上記のように、ドキュメント内でそのコンポーネントが再利用可能になります。しかし、Custom Elementsだけでは、**スタイルや機能の隔離ができないため、他の要素に影響を与えてしまう可能性**があります。
 
 例えば、以下のドキュメントにはあらかじめ`.hello-world`クラスのスタイルを定義していました。
 
 https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L1-L17
 
-グローバルに定義されたクラスと競合しないよう、**Custom Elementだけに適用が閉じたCSSクラスを書きたい**ですが、Custom Elementだけではそれができません。
+こうしたグローバルに定義されたクラスと競合しないよう、**Custom Elementだけに適用が閉じたCSSクラスを書きたい**ですが、Custom Elementだけではそれができません。
 
-それゆえ、以下のように誤ってCustom Elementで`.hello-world`クラスを定義して使おうとすると、当然、あらかじめグローバルに定義されていた`.hello-world`クラスを上書きしてしまうことになります。
+それゆえ、以下のように誤ってCustom Elementで`.hello-world`クラスを定義して使おうとすると、当然、あらかじめグローバルに定義されていたクラスを上書きしてしまう恐れがあります。
 
 https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L38-L68
 
@@ -70,11 +70,9 @@ Shadow DOMは、Webページから完全に隔離されたDOMツリー(Shadowツ
 ### Shadow DOM が解決すること
 
 Shadow DOMを使用することで、**Webページの一部を隔離されたDOM（ShadowRoot）としてレンダリングできるため、Webページ全体のスタイルや機能に影響を与えず、特定の部分だけを変更できます。**
-
 <!-- textlint-disable -->
 コンポーネント指向開発においては、例えばCSS ModulesやScoped CSS、CSS-in-JSを使用することで、コンポーネントごとにスタイルをカプセル化し、ビルド段階で名前の衝突を避けるクラス名に変換できるので、実装する上では隔離されたものとして扱うことができます。
 <!-- textlint-enable -->
-
 しかし、Shadow DOMを使用することで**DOMレベルのカプセル化されたスタイリングが可能になるため、完全に独立したコンポーネントの作成と、グローバルスコープの汚染を防ぐことが可能です。**
 
 ### Shadow DOM の作成方法
@@ -170,7 +168,7 @@ SSR環境下で、DSDを使用したWeb Componentsを作成・使用してみま
 
 https://github.com/sakupi01/ssred-webcomponents-app
 
-Web ComponentのDSDはHTMLのtemplate要素を用いて作成できます。
+DSDはHTMLのtemplate要素を用いて作成できます。
 
 以下は、Web ComponentのShadow DOMをDSDを用いてSSR時に構築し、Hydrationの際にCustom Elementを登録してWeb Componentの機能をアップグレードする一連の手順です。
 
@@ -206,7 +204,7 @@ https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3
 
 [従来のShadow DOMの作成方法](#shadow-dom-の作成方法)でやっていた、JavaScriptでShadowRootを作成したり要素を追加したりする手順が不要になり、JavaScriptが無効な環境でもShadow DOMが構築されることが確認できますね！
 
-もちろん、Custom Elementsの登録はJavaScriptが有効な環境下で行なう必要があるので、JavaScriptを無効化した状態ではCustom Elementで定義されているWeb Componentsの機能は享受できません。
+もちろん、Custom Elementsの登録（上記手順5, 6）はJavaScriptが有効な環境下で行なう必要があるので、JavaScriptを無効化した状態ではCustom Elementで定義されているWeb Componentsの機能は享受できません。
 しかし、DOM上はShadow DOMが構築されているため、変わらずCLSやSEOの面での恩恵を受けることができます。
 
 とはいえ、実用上は、イベント発火後などクライアントサイドで動的にDSDを追加したい場面もあります。
@@ -221,7 +219,7 @@ DSDを使用することで、**SSRでShadow DOMを構築できるようにな�
 https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L29-L63
 
 しかし、`InnerHtmlDSDAddButton`ボタンを押してもDSDを用いたWeb Componentはレンダーされません。
-これは、セキュリティ上の理由から、`innerHTML`などのフラグメント解析APIはDSDをパースできないためです。
+これは、セキュリティ上の理由から、`innerHTML`などのフラグメント解析APIがDSDをパースできないためです。
 
 ![innerHTMLを使用してDSDを追加できない](/images/innerhtml.gif)
 *innerHTMLを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加できない*
@@ -256,7 +254,7 @@ DSDを使用することで、従来のShadow DOMを用いたWeb Componentsの�
 
 また、`setHTMLUnsafe`や`parseHTMLUnsafe`を使用することで、動的にDSDを追加することが可能になり、Web Componentsは利用範囲の広がりを見せてくれました。
 
-とはいえ、動的に追加されるDSDの安全性への懸念とその解決策[^2]、Custom Elementsの記述を宣言的にするDeclarative Custom ElementsやHTMLリソース（Custom Element、HTML Template、スタイルなど）をモジュールとしてexport/importするHTML Modulesに関する合意形成や実装など[^3]、まだまだ実用に至るには考慮すべき事項が残されているようです。
+とはいえ、動的に追加されるDSDの安全性への懸念[^2]や、Custom Elementsの記述を宣言的にするDeclarative Custom ElementsやHTMLリソース（Custom Element、HTML Template、スタイルなど）をモジュールとしてexport/importするHTML Modulesに関する合意形成や実装など[^3]、まだまだ実用に至るには考慮事項が残されているようです。
 
 進化の目まぐるしいWeb Components、引き続き注目していきたいです💃🏻✨
 
