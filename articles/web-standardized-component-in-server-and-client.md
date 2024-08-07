@@ -84,43 +84,7 @@ Shadow DOMは以下のようにして作成できます。
 1. `this.attachShadow({mode: 'open'})`でShadow DOMを作成し、Custom Elementに紐づける
 2. `shadowRoot.innerHTML`などでShadow DOMに要素を追加
 
-```js: Shadow DOMを用いた <hello-world /> Custom Elementの定義
-// https://github.com/sakupi01/webcomponents-with-dsd/blob/main/shadow-dom.html#L70-L105
-// Shadow DOMを使ったカスタムエレメント
-class ShadowedHelloWorld extends HTMLElement {
-  constructor() {
-    super();
-    // Shadow DOM を作成
-    this.attachShadow({ mode: "open" });
-  }
-
-  connectedCallback() {
-    const content = this.getAttribute("content") || "World";
-
-    // buttonとそのスタイルをShadow DOM内に定義
-    this.shadowRoot.innerHTML = `
-        <style>
-          .hello-world {
-            background-color: blue;
-            color: white;
-            padding: 15px 32px;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-          }
-        </style>
-        <button class="hello-world">Hello ${content}</button>
-      `;
-
-    // buttonがクリックされたときの処理
-    const button = this.shadowRoot.querySelector("button");
-    button.addEventListener("click", () => {
-      alert(`Hello, ${content}!`);
-    });
-  }
-}
-window.customElements.define("shadowed-hello-world", ShadowedHelloWorld);
-```
+https://github.com/sakupi01/webcomponents-with-dsd/blob/main/shadow-dom.html#L70-L105
 
 :::message
 HTML要素の中には、Shadowツリーを紐づけることができない(`this.attachShadow()`できない)要素もあります。
