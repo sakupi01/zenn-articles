@@ -141,7 +141,7 @@ Web標準でのコンポーネント指向開発において、Custom Elements�
 
 - JavaScriptが使用できない環境では動作しない
 - Shadow DOMはクライアントサイドJavaScriptで構築されるため、CLSを引き起こす可能性がある
-- Shadow DOMはクライアントサイドJavaScriptでのみサポートされており、サーバーサイドで記述できる構文が存在しないため、SSRができない
+- Shadow DOMはサーバーサイドでの利用をサポートしていないため、SSRができない
 
 これらの問題は、Shadow DOMがクライアントサイドJavaScript環境でのみサポートされるWeb APIで生成されていることに帰結すると言えるでしょう。
 
