@@ -52,7 +52,7 @@ https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a412
 
 こうしたグローバルに定義されたクラスと競合しないよう、**Custom Elementだけに適用が閉じたCSSクラスを書きたい**ですが、Custom Elementだけではそれができません。
 
-それゆえ、以下のように誤ってCustom Elementで`.hello-world`クラスを定義して使おうとすると、当然、あらかじめグローバルに定義されていたクラスを上書きしてしまう恐れがあります。
+それゆえ、以下のようにCustom Elementで`.hello-world`クラスを同様に定義して使おうとすると、あらかじめグローバルに定義されていたクラスを上書きしてしまいます。
 
 https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L38-L68
 
