@@ -56,7 +56,7 @@ https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a412
 
 https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L38-L68
 
-したがって、`<hello-world />`要素を使用すると、ドキュメント内の他の`<button>`要素（「I must be RED」ボタン）のスタイルも`<hello-world />`のスタイルになってしまいます。
+上記のコードをブラウザ上で見てみると、`<hello-world />`要素のスタイルが、別の`<button>`要素（「I must be RED」ボタン）にも適用されてしまっています。
 
 ![「I must be RED」ボタンが`<hello-world />`で定義されたCSSにより上書きされた青色のスタイルになる](/images/customelements-effect.png)
 *「I must be RED」ボタンが`<hello-world />`で定義されたCSSにより上書きされた青色のスタイルになる*
