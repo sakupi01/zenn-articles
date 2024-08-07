@@ -42,6 +42,8 @@ https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a412
 
 https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L24-L29
 
+![カスタム要素](/images/simple_custom_elements.png)
+
 ### Custom Elementsの問題点
 
 Custom Elementsとして要素を定義すると、上記のように、ドキュメント内でそのコンポーネントが再利用可能になります。しかし、Custom Elementsだけでは、**スタイルや機能の隔離ができないため、他の要素に影響を与えてしまう可能性**があります。
