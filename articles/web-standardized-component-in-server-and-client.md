@@ -16,7 +16,7 @@ published_at: 2024-08-09 17:30 # 未来の日時を指定する
 
 これらの機能・Web APIは、サーバーサイドでの宣言的なShadow DOMの構築によるプログレッシブエンハンスメントなWeb Componentsの実現や、クライアントサイドでの動的なDeclarative Shadow DOMの追加によるWeb Componentsの利用範囲の拡大に寄与してくれています。
 
-今回は、このような盛り上がりを見せてくれているWeb Componentsが、Declarative Shadow DOMや`setHTMLUnsafe`・`parseHTMLUnsafe`の登場によってどのような進化を遂げているのか、具体例を交えながら理解していく記事です🌼
+今回は、このような盛り上がりを見せるWeb Componentsが、Declarative Shadow DOMや`setHTMLUnsafe`・`parseHTMLUnsafe`の登場によってどのような進化を遂げているのか、具体例を交えながら理解していく記事です🌼
 
 ## Web Components とは？
 
