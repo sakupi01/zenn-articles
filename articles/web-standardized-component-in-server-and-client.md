@@ -26,7 +26,7 @@ published_at: 2024-08-09 17:30 # 未来の日時を指定する
 
 しかし、他フレームワークのコンポーネントとWeb Componentsの差分は、Web標準レベルでコンポーネントが定義されるかどうかという点にあります。
 
-例えば、ReactのコンポーネントはWeb標準ではないので、使用するには必ずReactをインストールしている必要があります。しかし、Web ComponentsはWeb標準の技術のため、プラットフォームがWebであればいつでも使えて、ライブラリに依存しない、つまりライブラリ間で互換性のあるコンポーネントの開発が可能になるといえます。
+例えば、ReactのコンポーネントはWeb標準ではないので、使用するにはReactをインストールしている必要があります。しかし、Web ComponentsはWeb標準の技術のため、プラットフォームがWebであればいつでも使えて、ライブラリに依存しない、つまりライブラリ間で互換性のあるコンポーネントの開発が可能になるといえます。
 
 そんな **[Web Components](https://wicg.github.io/webcomponents/)** は、**[Custom Elements](https://html.spec.whatwg.org/multipage/custom-elements.html)**・**[HTML Templates](https://www.w3.org/TR/html-templates/)**・**[Shadow DOM](https://wicg.github.io/webcomponents/spec/shadow/)** の3つの仕様の上に成り立っています。
 
@@ -140,7 +140,7 @@ Shadow DOMを使用することで、以前のようにCustom Elementのスタ�
 Web標準でのコンポーネント指向開発において、Custom Elementsのスタイルや機能を隔離するためにShadow DOMはなくてはならない技術ですが、以下のような問題点を含んでいます。
 
 - JavaScriptが使用できない環境では動作しない
-- Shadow DOMはクライアントサイドJavaScriptで構築されるため、CLSを引き起こす可能性がある
+- Shadow DOMはクライアントサイドJavaScriptで構築されるため、レイアウトシフトを引き起こす可能性がある
 - Shadow DOMはサーバーサイドでの利用をサポートしていないため、SSRができない
 
 これらの問題は、Shadow DOMがクライアントサイドJavaScript環境でのみサポートされるWeb APIで生成されていることに帰結すると言えるでしょう。
@@ -150,16 +150,17 @@ Web標準でのコンポーネント指向開発において、Custom Elements�
 ## Declarative Shadow DOM とは？
 
 Declarative Shadow DOM is **Shadow DOM without JavaScript**です🌝
+（以下、DSD）
 
 ### Declarative Shadow DOM が解決すること
 
 [従来のShadow DOMの作成方法](#shadow-dom-の作成方法)は、JavaScriptでShadowRootを作成し、その中に要素を追加する方法でした。
 つまり、Webページを読み込んでそれがレンダーされてからやっとJavaScriptが実行され、Shadow DOMが生成されていました。
 
-Declarative Shadow DOM（以下、DSD）はHTMLパーサーの機能です。
+Declarative Shadow DOMはHTMLパーサーの機能です。
 ShadowRootは、HTML解析中に存在する `shadowrootmode`属性を持つ`<template>`タグに対して解析され、添付されます。つまり、Shadow DOMは最初のHTML解析時に構築できると言えます。
 
-これにより、JavaScriptのHydrationを待つことなく、Shadow DOMを構築できるようになります。加えて、CLSを引き起こさずにコンポーネントをレンダリングできたり、SEOの面でも恩恵を受けたりできます🌟
+これにより、JavaScriptのHydrationを待つことなく、Shadow DOMを構築できるようになります。加えて、レイアウトシフトを引き起こさずにコンポーネントをレンダリングできたり、SEOの面でも恩恵を受けたりできます🌟
 
 ### Declarative Shadow DOM によるShadow DOMの構築
 
@@ -172,26 +173,33 @@ DSDはHTMLのtemplate要素を用いて作成できます。
 
 以下は、Web ComponentのShadow DOMをDSDを用いてSSR時に構築し、Hydrationの際にCustom Elementを登録してWeb Componentの機能をアップグレードする一連の手順です。
 
-1. `<template>`要素を使ってDSD(`HelloWorldDsdButton`)の構造を定義
-   1. `<template>`要素の`shadowrootmode`属性にopenを指定
-   2. `<template>`要素内にShadow DOMの構造を記述
+#### 1. `<template>`要素を使ってDSD(`HelloWorldDsdButton`)の構造を定義
+1. `<template>`要素の`shadowrootmode`属性にopenを指定
+2. `<template>`要素内にShadow DOMの構造を記述
 
 https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/web-components/hello-world/shadow-dom.tsx#L5-L31
-2. SSRされる`SSRedPage`にDSDを追加
+
+#### 2. SSRされる`SSRedPage`にDSDを追加
 
 https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/index.tsx#L29-L52
-3. Custom Elementを実装
-   1. HTMLElementを継承した`HelloWorldCE`クラスを作成
-   2. Custom Elementの持つ機能を`connectedCallback`メソッド内で実装
+
+#### 3. Custom Elementを実装
+1. HTMLElementを継承した`HelloWorldCE`クラスを作成
+2. Custom Elementの持つ機能を`connectedCallback`メソッド内で実装
 
 https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/web-components/hello-world/custom-element.ts#L1-L9
-4. クライアントサイドのエントリーポイント（`./src/client/index.tsx`）を作成
-    1. `window.customElements.define`でCustom Elementを定義
-    2. `./src/client/index.tsx`はビルド時に`./static/client.js`として出力する
+
+#### 4. クライアントサイドのエントリーポイント（`./src/client/index.tsx`）を作成
+1. `window.customElements.define`でCustom Elementを定義
+2. `./src/client/index.tsx`はビルド時に`./static/client.js`として出力する
 
 https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/client/index.tsx#L5-L9
-5. `./static/client.js`を`<script>`タグで読み込む
-6. Hydration時にclient.jsで定義されたCustom Elementが登録され、Web Componentの機能がアップグレードされる（= Custom Elementが有効になり、Custom Element内で実装した機能がShadow DOMに適用される）
+
+#### 5. `./static/client.js`を`<script>`タグで読み込む
+
+#### 6. Hydration時にclient.jsで定義されたCustom Elementが登録され、Web Componentの機能がアップグレードされる
+
+Custom Elementが有効になり、Custom Element内で実装した機能がShadow DOMに適用される
 
 https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/index.tsx#L15-L27
 
@@ -224,7 +232,7 @@ https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea7798
 ![innerHTMLを使用してDSDを追加できない](/images/innerhtml.gif)
 *innerHTMLを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加できない*
 
-DSDを適用したHTMLを解析する唯一のWeb APIは、`setHTMLUnsafe`または`parseHTMLUnsafe`を使用することです。（2024/8月現在）
+DSDを適用したHTMLを解析する唯一のWeb APIは、`setHTMLUnsafe`または`parseHTMLUnsafe`を使用することです。（2024年8月現在）
 `setHTMLUnsafe`は、`innerHTML`と同様にHTMLフラグメントの解析に加えて、DSDのパースもサポートしています。
 以下の`SetHtmlUnsafeDSDAddButton`では、`setHTMLUnsafe`で`HelloWorldDsdButton`を追加しています。
 
@@ -254,20 +262,19 @@ DSDを使用することで、従来のShadow DOMを用いたWeb Componentsの�
 
 また、`setHTMLUnsafe`や`parseHTMLUnsafe`を使用することで、動的にDSDを追加することが可能になり、Web Componentsは利用範囲の広がりを見せてくれました。
 
-とはいえ、動的に追加されるDSDの安全性への懸念[^2]や、Custom Elementsの記述を宣言的にするDeclarative Custom ElementsやHTMLリソース（Custom Element、HTML Template、スタイルなど）をモジュールとしてexport/importするHTML Modulesに関する合意形成や実装など[^3]、まだまだ実用に至るには考慮事項が残されているようです。
+とはいえ、動的に追加されるDSDの安全性への懸念[^1]や、Custom Elementsの記述を宣言的にするDeclarative Custom ElementsやHTMLリソース（Custom Element、HTML Template、スタイルなど）をモジュールとしてexport/importするHTML Modulesに関する合意形成や実装など[^2]、まだまだ実用に至るには考慮事項が残されているようです。
 
 進化の目まぐるしいWeb Components、引き続き注目していきたいです💃🏻✨
 
 ## 参考
-[https://developer.mozilla.org/ja/docs/Web/API/Web_components/Using_shadow_DOM](https://developer.mozilla.org/ja/docs/Web/API/Web_components/Using_shadow_DOM)
-[https://developer.chrome.com/docs/css-ui/declarative-shadow-dom?hl=ja#parser-only](https://developer.chrome.com/docs/css-ui/declarative-shadow-dom?hl=ja#parser-only)
-[https://speakerdeck.com/uhyo/shadow-domtocssnoxian-zhuang](https://speakerdeck.com/uhyo/shadow-domtocssnoxian-zhuang)
-[https://www.docswell.com/s/jxck/5246NN-1st-year-of-webcomponents-v4](https://www.docswell.com/s/jxck/5246NN-1st-year-of-webcomponents-v4)
-[https://github.com/mfreed7/declarative-shadow-dom/blob/master/README.md](https://github.com/mfreed7/declarative-shadow-dom/blob/master/README.md)
-[https://wicg.github.io/webcomponents/](https://wicg.github.io/webcomponents/)
-[https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555](https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555)
-[https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md)
+1. https://developer.mozilla.org/ja/docs/Web/API/Web_components/Using_shadow_DOM
+2. https://developer.chrome.com/docs/css-ui/declarative-shadow-dom?hl=ja#parser-only
+3. https://speakerdeck.com/uhyo/shadow-domtocssnoxian-zhuang
+4. https://www.docswell.com/s/jxck/5246NN-1st-year-of-webcomponents-v4
+5. https://github.com/mfreed7/declarative-shadow-dom/blob/master/README.md
+6. https://wicg.github.io/webcomponents/
+7. https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555
+8. https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md
 
 [^1]: [Sanitization Explainer](https://github.com/WICG/sanitizer-api/blob/main/explainer.md)
-[^2]: [Sanitization Explainer](https://github.com/WICG/sanitizer-api/blob/main/explainer.md)
-[^3]: [Declarative Syntax for Custom Elements](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md)、[HTML Modules and Declarative Custom Elements Proposal](https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555)や[declarative-custom-elementsに関してfileされたIssue](https://github.com/search?q=repo%3AWICG%2Fwebcomponents+declarative-custom-elements&type=issues)を参照
+[^2]: [Declarative Syntax for Custom Elements](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md)、[HTML Modules and Declarative Custom Elements Proposal](https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555)や[declarative-custom-elementsに関してfileされたIssue](https://github.com/search?q=repo%3AWICG%2Fwebcomponents+declarative-custom-elements&type=issues)を参照
