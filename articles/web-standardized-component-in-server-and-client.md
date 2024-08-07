@@ -155,7 +155,7 @@ Declarative Shadow DOM is **Shadow DOM without JavaScript**です🌝
 ### Declarative Shadow DOM が解決すること
 
 [従来のShadow DOMの作成方法](#shadow-dom-の作成方法)は、JavaScriptでShadowRootを作成し、その中に要素を追加する方法でした。
-つまり、Webページを読み込んでそれがレンダーされてからやっとJavaScriptが実行され、Shadow DOMが生成されていました。
+つまり、Webページを読み込んでHTMLが解析され、CSSが適用されてからやっとJavaScriptが実行され、Shadow DOMが生成されていました。
 
 Declarative Shadow DOMはHTMLパーサーの機能です。
 ShadowRootは、HTML解析中に存在する `shadowrootmode`属性を持つ`<template>`タグに対して解析され、添付されます。つまり、Shadow DOMは最初のHTML解析時に構築できると言えます。
@@ -227,23 +227,23 @@ DSDを使用することで、**SSRでShadow DOMを構築できるようにな�
 https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L29-L63
 
 しかし、`InnerHtmlDSDAddButton`ボタンを押してもDSDを用いたWeb Componentはレンダーされません。
-これは、セキュリティ上の理由から、`innerHTML`などのフラグメント解析APIがDSDをパースできないためです。
+これは、セキュリティ上の理由から、`innerHTML`などのフラグメント解析APIがDSDを解析できないためです。
 
 ![innerHTMLを使用してDSDを追加できない](/images/innerhtml.gif)
 *innerHTMLを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加できない*
 
 DSDを適用したHTMLを解析する唯一のWeb APIは、`setHTMLUnsafe`または`parseHTMLUnsafe`を使用することです。（2024年8月現在）
-`setHTMLUnsafe`は、`innerHTML`と同様にHTMLフラグメントの解析に加えて、DSDのパースもサポートしています。
+`setHTMLUnsafe`は、`innerHTML`と同様にHTMLフラグメントの解析に加えて、DSDの解析もサポートしています。
 以下の`SetHtmlUnsafeDSDAddButton`では、`setHTMLUnsafe`で`HelloWorldDsdButton`を追加しています。
 
 https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L10-L27
 
-`setHTMLUnsafe`を使用すると、DSDを含んだHTMLフラグメントが正しくパースされ、Shadow DOMが構築されていることが確認できます。(Chrome 127のExperimental Featuresフラグを有効化、Chrome Canaryで確認できました)
+`setHTMLUnsafe`を使用すると、DSDを含んだHTMLフラグメントが正しく解析され、Shadow DOMが構築されていることが確認できます。(Chrome 127のExperimental Featuresフラグを有効化、Chrome Canaryで確認できました)
 
 ![setHTMLUnsafeを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加する](/images/sethtmlunsafe.gif)
 *setHTMLUnsafeを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加する*
 
-もう1つのAPIである`parseHTMLUnsafe`も、`DOMParser.parseFromString()` と同様に機能し、DSDのパースが可能です。
+もう1つのAPIである`parseHTMLUnsafe`も、`DOMParser.parseFromString()` と同様に機能し、DSDの解析が可能です。
 
 しかし、読んで字の如く「Unsafe」と名前にあるとおり、これらのAPIは安全でないという点に注意が必要です。
 
