@@ -38,9 +38,9 @@ Custom Elementsは、独自のHTML要素を定義するための技術です。
 
 Custom Elementsを使用することで、Webページに独自のHTML要素を追加し、その要素に対して独自の機能やスタイルを定義できます。
 
-<https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L38-L68>
+https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L38-L68
 
-<https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L24-L29>
+https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L24-L29
 
 ![カスタム要素](/images/simple_custom_elements.png)
 
@@ -50,13 +50,13 @@ Custom Elementsとして要素を定義すると、上記のように、ドキ�
 
 例えば、以下のドキュメントにはあらかじめ`.hello-world`クラスのスタイルを定義していました。
 
-<https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L1-L17>
+https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L1-L17
 
 こうしたグローバルに定義されたクラスと競合しないよう、**Custom Elementだけに適用が閉じたCSSクラスを書きたい**ですが、Custom Elementだけではそれができません。
 
 それゆえ、以下のようにCustom Elementで`.hello-world`クラスを同様に定義して使おうとすると、あらかじめグローバルに定義されていたクラスを上書きしてしまいます。
 
-<https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L38-L68>
+https://github.com/sakupi01/webcomponents-with-dsd/blob/6ff4e15daf79e10fba64a4123b8c9f0c147b97e2/shadow-dom.html#L38-L68
 
 上記のコードをブラウザ上で見てみると、`<hello-world />`要素のスタイルが、別の`<button>`要素（「I must be RED」ボタン）にも適用されてしまっています。
 
@@ -84,7 +84,7 @@ Shadow DOMは以下のようにして作成できます。
 1. `this.attachShadow({mode: 'open'})`でShadow DOMを作成し、Custom Elementに紐づける
 2. `shadowRoot.innerHTML`などでShadow DOMに要素を追加
 
-<https://github.com/sakupi01/webcomponents-with-dsd/blob/main/shadow-dom.html#L70-L105>
+https://github.com/sakupi01/webcomponents-with-dsd/blob/main/shadow-dom.html#L70-L105
 
 :::message
 HTML要素の中には、Shadowツリーを紐づけることができない(`this.attachShadow()`できない)要素もあります。
@@ -133,7 +133,7 @@ ShadowRootは、HTML解析中に存在する `shadowrootmode`属性を持つ`<te
 SSR環境下で、DSDを使用したWeb Componentsを作成・使用してみます。
 以下のリポジトリでは、SSRのためのWebサーバーとしてHonoを使用していますが、Web標準なコンポーネントを実現するため、それ以外のフロントエンドフレームワークは使用していません。
 
-<https://github.com/sakupi01/ssred-webcomponents-app>
+https://github.com/sakupi01/ssred-webcomponents-app
 
 DSDはHTMLのtemplate要素を用いて作成できます。
 
@@ -144,21 +144,21 @@ DSDはHTMLのtemplate要素を用いて作成できます。
 1. `<template>`要素の`shadowrootmode`属性にopenを指定
 2. `<template>`要素内にShadow DOMの構造を記述
 
-<https://github.com/sakupi01/ssred-webcomponents-app/blob/88892d0e9329c8e5cfb1b2193eff4aff53f3399d/src/index.html#L11-L30>
+https://github.com/sakupi01/ssred-webcomponents-app/blob/88892d0e9329c8e5cfb1b2193eff4aff53f3399d/src/index.html#L11-L30
 
 #### 2. Custom Elementを実装
 
 1. HTMLElementを継承した`HelloWorldCE`クラスを作成
 2. Custom Elementの持つ機能を`connectedCallback`メソッド内で実装
 
-<https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/web-components/hello-world/custom-element.ts#L1-L9>
+https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/web-components/hello-world/custom-element.ts#L1-L9
 
 #### 3. クライアントサイドのエントリーポイント（`./src/client/index.tsx`）を作成
 
 1. `window.customElements.define`でCustom Elementを定義
 2. `./src/client/index.tsx`はビルド時に`./static/client.js`として出力する
 
-<https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L2-L7>
+https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L2-L7
 
 #### 4. `./static/client.js`を`<script>`タグで読み込む
 
@@ -166,7 +166,7 @@ DSDはHTMLのtemplate要素を用いて作成できます。
 
 Custom Elementが有効になり、Custom Element内で実装した機能がShadow DOMに適用される
 
-<https://github.com/sakupi01/ssred-webcomponents-app/blob/33a63b14e3006bbb45565e3930112b4ebad8b46b/src/index.html#L1-L11>
+https://github.com/sakupi01/ssred-webcomponents-app/blob/33a63b14e3006bbb45565e3930112b4ebad8b46b/src/index.html#L1-L11
 
 これにより、SSRされた結果のHTMLにShadow DOMが構築されます🎉
 
@@ -189,9 +189,9 @@ DSDを使用することで、**SSRでShadow DOMを構築できるようにな�
 
 まず、以下の`InnerHtmlDSDAddButton`で`innerHTML`を使用して、`body`に`<hello-world-button />`を追加してみます。
 
-<https://github.com/sakupi01/ssred-webcomponents-app/blob/88892d0e9329c8e5cfb1b2193eff4aff53f3399d/src/client/index.tsx#L9-L25>
+https://github.com/sakupi01/ssred-webcomponents-app/blob/88892d0e9329c8e5cfb1b2193eff4aff53f3399d/src/client/index.tsx#L9-L25
 
-<https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L44-L76>
+https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L44-L76
 
 しかし、`InnerHtmlDSDAddButton`ボタンを押しても**DSDを用いたWeb Componentはレンダーされません**。
 これは、セキュリティ上の理由から、`innerHTML`などのフラグメント解析APIがDSDを解析できないためです。
@@ -203,7 +203,7 @@ DSDを適用したHTMLを解析する唯一のWeb APIは、`setHTMLUnsafe`また
 `setHTMLUnsafe`は、`innerHTML`と同様にHTMLフラグメントの解析に加えて、DSDの解析もサポートしています。
 以下の`SetHtmlUnsafeDSDAddButton`では、`setHTMLUnsafe`で`<hello-world-button />`を追加しています。
 
-<https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L27-L42>
+https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L27-L42
 
 `setHTMLUnsafe`を使用すると、DSDを含んだHTMLフラグメントが正しく解析され、Shadow DOMが構築されていることが確認できます。[^1]
 
@@ -235,14 +235,14 @@ DSDを使用することで、従来のShadow DOMを用いたWeb Componentsの�
 
 ## 参考
 
-1. <https://developer.mozilla.org/ja/docs/Web/API/Web_components/Using_shadow_DOM>
-2. <https://developer.chrome.com/docs/css-ui/declarative-shadow-dom?hl=ja#parser-only>
-3. <https://speakerdeck.com/uhyo/shadow-domtocssnoxian-zhuang>
-4. <https://www.docswell.com/s/jxck/5246NN-1st-year-of-webcomponents-v4>
-5. <https://github.com/mfreed7/declarative-shadow-dom/blob/master/README.md>
-6. <https://wicg.github.io/webcomponents/>
-7. <https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555>
-8. <https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md>
+1. https://developer.mozilla.org/ja/docs/Web/API/Web_components/Using_shadow_DOM
+2. https://developer.chrome.com/docs/css-ui/declarative-shadow-dom?hl=ja#parser-only
+3. https://speakerdeck.com/uhyo/shadow-domtocssnoxian-zhuang
+4. https://www.docswell.com/s/jxck/5246NN-1st-year-of-webcomponents-v4
+5. https://github.com/mfreed7/declarative-shadow-dom/blob/master/README.md
+6. https://wicg.github.io/webcomponents/
+7. https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555
+8. https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md
 
 [^1]: Chrome 127のExperimental Featuresフラグを有効化、Chrome Canaryで確認できました
 [^2]: [Sanitization Explainer](https://github.com/WICG/sanitizer-api/blob/main/explainer.md)
