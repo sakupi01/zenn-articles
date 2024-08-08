@@ -113,22 +113,22 @@ Web標準でのコンポーネント指向開発において、Custom Elements�
 
 そこで登場したのが、**Declarative Shadow DOM**です。
 
-## Declarative Shadow DOM とは？
+## Declarative Shadow DOM (DSD) とは？
 
 Declarative Shadow DOM is **Shadow DOM without JavaScript**です🌝
 （以下、DSD）
 
-### Declarative Shadow DOM が解決すること
+### DSD が解決すること
 
 [従来のShadow DOMの作成方法](#shadow-dom-の作成方法)は、JavaScriptでShadowRootを作成し、その中に要素を追加する方法でした。
 つまり、Webページを読み込んでHTMLが解析され、CSSが適用されてからやっとJavaScriptが実行され、Shadow DOMが生成されていました。
 
-Declarative Shadow DOMはHTMLパーサーの機能です。
+DSDはHTMLパーサーの機能です。
 ShadowRootは、HTML解析中に存在する `shadowrootmode`属性を持つ`<template>`タグに対して解析され、添付されます。つまり、Shadow DOMは最初のHTML解析時に構築できると言えます。
 
 これにより、Hydrationを待つことなく、Shadow DOMを構築できるようになります。加えて、レイアウトシフトを引き起こさずにコンポーネントをレンダリングできたり、SEOの面でも恩恵を受けたりできます🌟
 
-### Declarative Shadow DOM によるShadow DOMの構築
+### DSD によるShadow DOMの構築
 
 SSR環境下で、DSDを使用したWeb Componentsを作成・使用してみます。
 以下のリポジトリでは、SSRのためのWebサーバーとしてHonoを使用していますが、Web標準なコンポーネントを実現するため、それ以外のフロントエンドフレームワークは使用していません。
@@ -214,7 +214,7 @@ https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea7798
 しかし、読んで字の如く「Unsafe」と名前にあるとおり、これらのAPIは安全でないという点に注意が必要です。
 
 > これらの API は両方とも安全ではありません。つまり、入力サニタイズを行いません。そのため、何を与えても安全であることを確認する必要があります。今後のリリースでは、入力のサニタイズを提供するバージョンを用意する予定です。
-> [Chrome 124 の新機能](https://developer.chrome.com/blog/new-in-chrome-124?hl=ja#dsd)
+*出典：[Chrome 124 の新機能](https://developer.chrome.com/blog/new-in-chrome-124?hl=ja#dsd)*
 
 まだWICGで検討段階の仕様ですが、将来的には`setHTMLUnsafe`や`parseHTMLUnsafe`が安全に使用できるようAPIが改善されたり、`setHTML`や`parseHTML`といったデフォルトでサニタイズしてくれるAPIが提供される見込みがあります。[^2]
 
