@@ -1,5 +1,10 @@
 {
     "cSpell.words": [
         "textlint"
-    ]
+    ],
+    "[markdown]": {
+        "editor.codeActionsOnSave": {
+          "source.fixAll.markdownlint": "explicit"
+      }
+    }
 }
