@@ -26,7 +26,7 @@ published_at: 2024-08-09 17:30 # 未来の日時を指定する
 
 しかし、他フレームワークのコンポーネントとWeb Componentsの差分は、Web標準レベルでコンポーネントが定義されるかどうかという点にあります。
 
-例えば、ReactのコンポーネントはWeb標準ではないので、使用するにはReactをインストールしている必要があります。しかし、Web ComponentsはWeb標準の技術のため、プラットフォームがWebであればいつでも使えて、ライブラリに依存しない、つまりライブラリ間で互換性のあるコンポーネントの開発が可能になるといえます。
+例えば、ReactのコンポーネントはWeb標準ではないので、使用するにはReactをインストールしている必要があります。しかし、Web ComponentsはWeb標準の技術のため、ライブラリに依存しない、つまりライブラリ間で互換性のあるコンポーネントの開発が可能になるといえます。
 
 そんな **[Web Components](https://wicg.github.io/webcomponents/)** は、**[Custom Elements](https://html.spec.whatwg.org/multipage/custom-elements.html)**・**[HTML Templates](https://www.w3.org/TR/html-templates/)**・**[Shadow DOM](https://wicg.github.io/webcomponents/spec/shadow/)** の3つの仕様の上に成り立っています。
 
@@ -139,42 +139,38 @@ DSDはHTMLのtemplate要素を用いて作成できます。
 
 以下は、Web ComponentのShadow DOMをDSDを用いてSSR時に構築し、Hydrationの際にCustom Elementを登録してWeb Componentの機能をアップグレードする一連の手順です。
 
-#### 1. `<template>`要素を使ってDSD(`HelloWorldDsdButton`)の構造を定義
+#### 1. `<template>`要素を使ってDSDの構造を定義
 1. `<template>`要素の`shadowrootmode`属性にopenを指定
 2. `<template>`要素内にShadow DOMの構造を記述
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/web-components/hello-world/shadow-dom.tsx#L5-L31
+https://github.com/sakupi01/ssred-webcomponents-app/blob/88892d0e9329c8e5cfb1b2193eff4aff53f3399d/src/index.html#L11-L30
 
-#### 2. SSRされる`SSRedPage`にDSDを追加
-
-https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/index.tsx#L29-L52
-
-#### 3. Custom Elementを実装
+#### 2. Custom Elementを実装
 1. HTMLElementを継承した`HelloWorldCE`クラスを作成
 2. Custom Elementの持つ機能を`connectedCallback`メソッド内で実装
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/web-components/hello-world/custom-element.ts#L1-L9
+https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/web-components/hello-world/custom-element.ts#L1-L9
 
-#### 4. クライアントサイドのエントリーポイント（`./src/client/index.tsx`）を作成
+#### 3. クライアントサイドのエントリーポイント（`./src/client/index.tsx`）を作成
 1. `window.customElements.define`でCustom Elementを定義
 2. `./src/client/index.tsx`はビルド時に`./static/client.js`として出力する
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/client/index.tsx#L5-L9
+https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L5-L8
 
-#### 5. `./static/client.js`を`<script>`タグで読み込む
+#### 4. `./static/client.js`を`<script>`タグで読み込む
 
-#### 6. Hydration時にclient.jsで定義されたCustom Elementが登録され、Web Componentの機能がアップグレードされる
+#### 5. Hydration時にclient.jsで定義されたCustom Elementが登録され、Web Componentの機能がアップグレードされる
 
 Custom Elementが有効になり、Custom Element内で実装した機能がShadow DOMに適用される
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/bf9a0fb1d4c9b00f6c318d3a4f47000529b8d5b4/src/index.tsx#L15-L27
+https://github.com/sakupi01/ssred-webcomponents-app/blob/33a63b14e3006bbb45565e3930112b4ebad8b46b/src/index.html#L1-L11
 
 これにより、SSRされた結果のHTMLにShadow DOMが構築されます🎉
 
 試しに、JavaScriptを無効化した環境でShadow DOMが構築されるか確認してみましょう。
 
-![JavaScriptが無効な環境でもShadow DOMを用いたWeb Component(`HelloWorldDsdButton`)が構築される](/images/dsd.gif)
-*JavaScriptが無効な環境でもShadow DOMを用いたWeb Component(`HelloWorldDsdButton`)が構築される*
+![JavaScriptが無効な環境でもShadow DOMを用いたWeb Component(`<hello-world-button />`)が構築される](/images/dsd.gif)
+*JavaScriptが無効な環境でもShadow DOMを用いたWeb Component(`<hello-world-button />`)が構築される*
 
 [従来のShadow DOMの作成方法](#shadow-dom-の作成方法)でやっていた、JavaScriptでShadowRootを作成したり要素を追加したりする手順が不要になり、JavaScriptが無効な環境でもShadow DOMが構築されることが確認できますね！
 
@@ -186,28 +182,30 @@ DSDを使用することで、**SSRでShadow DOMを構築できるようにな�
 
 ## `setHTMLUnsafe`・`parseHTMLUnsafe`で動的にDSDを追加する
 
-例えば、ユーザーがボタンをクリックした際に、新たにDSDを用いたWeb Component（`HelloWorldDsdButton`）を追加したい場合を考えてみましょう。
+例えば、ユーザーがボタンをクリックした際に、新たにDSDを用いたWeb Component（`<hello-world-button />`）を追加したい場合を考えてみましょう。
 
-まず、以下の`InnerHtmlDSDAddButton`で`innerHTML`を使用して、`body`に`HelloWorldDsdButton`を追加してみます。
+まず、以下の`InnerHtmlDSDAddButton`で`innerHTML`を使用して、`body`に`<hello-world-button />`を追加してみます。
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L29-L63
+https://github.com/sakupi01/ssred-webcomponents-app/blob/88892d0e9329c8e5cfb1b2193eff4aff53f3399d/src/client/index.tsx#L9-L25
 
-しかし、`InnerHtmlDSDAddButton`ボタンを押してもDSDを用いたWeb Componentはレンダーされません。
+https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L44-L76
+
+しかし、`InnerHtmlDSDAddButton`ボタンを押しても**DSDを用いたWeb Componentはレンダーされません**。
 これは、セキュリティ上の理由から、`innerHTML`などのフラグメント解析APIがDSDを解析できないためです。
 
 ![innerHTMLを使用してDSDを追加できない](/images/innerhtml.gif)
-*innerHTMLを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加できない*
+*innerHTMLを使用してDSDを利用したWeb Component（`<hello-world-button />`）を追加できない*
 
 DSDを適用したHTMLを解析する唯一のWeb APIは、`setHTMLUnsafe`または`parseHTMLUnsafe`を使用することです。（2024年8月現在）
 `setHTMLUnsafe`は、`innerHTML`と同様にHTMLフラグメントの解析に加えて、DSDの解析もサポートしています。
-以下の`SetHtmlUnsafeDSDAddButton`では、`setHTMLUnsafe`で`HelloWorldDsdButton`を追加しています。
+以下の`SetHtmlUnsafeDSDAddButton`では、`setHTMLUnsafe`で`<hello-world-button />`を追加しています。
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L10-L27
+https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L27-L42
 
 `setHTMLUnsafe`を使用すると、DSDを含んだHTMLフラグメントが正しく解析され、Shadow DOMが構築されていることが確認できます。[^1]
 
-![setHTMLUnsafeを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加する](/images/sethtmlunsafe.gif)
-*setHTMLUnsafeを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加する*
+![setHTMLUnsafeを使用してDSDを利用したWeb Component（`<hello-world-button />`）を追加する](/images/sethtmlunsafe.gif)
+*setHTMLUnsafeを使用してDSDを利用したWeb Component（`<hello-world-button />`）を追加する*
 
 もう1つのAPIである`parseHTMLUnsafe`も、`DOMParser.parseFromString()` と同様に機能し、DSDの解析が可能です。
 
