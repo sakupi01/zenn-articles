@@ -14,7 +14,7 @@ published_at: 2024-08-09 17:30 # 未来の日時を指定する
 
 [Interop 2024のFocus Areas](https://web.dev/blog/interop-2024?hl=ja#all_focus_areas_for_2024)の1つに、[Web Components](https://wicg.github.io/webcomponents/)があります。このWeb Componentsに関連する機能として、[Declarative Shadow DOM](https://caniuse.com/?search=Declarative%20Shadow%20DOM)や[`setHTMLUnsafe`](https://caniuse.com/?search=setHTMLUnsafe)、[`parseHTMLUnsafe`](https://caniuse.com/?search=parseHTMLUnsafe)が2024年に入って新たにBaselineに追加されました。
 
-これらの機能・Web APIは、サーバーサイドでの宣言的なShadow DOMの構築によるプログレッシブエンハンスメントなWeb Componentsの実現や、クライアントサイドでの動的なDeclarative Shadow DOMの追加によるWeb Componentsの利用範囲の拡大に寄与してくれています。
+これらの機能・Web APIは、サーバーサイドでの宣言的なShadow DOMの構築によるJavaScriptが無効な環境でも動作するWeb Componentsの実現や、クライアントサイドでの動的なDeclarative Shadow DOMの追加によるWeb Componentsの利用範囲の拡大に寄与してくれています。
 
 今回は、このような盛り上がりを見せるWeb Componentsが、Declarative Shadow DOMや`setHTMLUnsafe`・`parseHTMLUnsafe`の登場によってどのような進化を遂げているのか、具体例を交えながら理解していく記事です🌼
 
@@ -88,7 +88,7 @@ https://github.com/sakupi01/webcomponents-with-dsd/blob/main/shadow-dom.html#L70
 
 :::message
 HTML要素の中には、Shadowツリーを紐づけることができない(`this.attachShadow()`できない)要素もあります。
-詳しくは「[有効なshadow host](https://dom.spec.whatwg.org/#valid-shadow-host-name)」の項目を参照してください。
+詳しくは「[DOM Living Standard - 有効なshadow host](https://dom.spec.whatwg.org/#valid-shadow-host-name)」の項目を参照してください。
 :::
 
 上記の例では、`this.attachShadow({ mode: 'open' })`でShadow DOMを作成し、`this.shadowRoot.innerHTML`でShadow DOMに要素を追加しています。
@@ -126,7 +126,7 @@ Declarative Shadow DOM is **Shadow DOM without JavaScript**です🌝
 Declarative Shadow DOMはHTMLパーサーの機能です。
 ShadowRootは、HTML解析中に存在する `shadowrootmode`属性を持つ`<template>`タグに対して解析され、添付されます。つまり、Shadow DOMは最初のHTML解析時に構築できると言えます。
 
-これにより、JavaScriptのHydrationを待つことなく、Shadow DOMを構築できるようになります。加えて、レイアウトシフトを引き起こさずにコンポーネントをレンダリングできたり、SEOの面でも恩恵を受けたりできます🌟
+これにより、Hydrationを待つことなく、Shadow DOMを構築できるようになります。加えて、レイアウトシフトを引き起こさずにコンポーネントをレンダリングできたり、SEOの面でも恩恵を受けたりできます🌟
 
 ### Declarative Shadow DOM によるShadow DOMの構築
 
@@ -204,7 +204,7 @@ DSDを適用したHTMLを解析する唯一のWeb APIは、`setHTMLUnsafe`また
 
 https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L10-L27
 
-`setHTMLUnsafe`を使用すると、DSDを含んだHTMLフラグメントが正しく解析され、Shadow DOMが構築されていることが確認できます。(Chrome 127のExperimental Featuresフラグを有効化、Chrome Canaryで確認できました)
+`setHTMLUnsafe`を使用すると、DSDを含んだHTMLフラグメントが正しく解析され、Shadow DOMが構築されていることが確認できます。[^1]
 
 ![setHTMLUnsafeを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加する](/images/sethtmlunsafe.gif)
 *setHTMLUnsafeを使用してDSDを利用したWeb Component（`HelloWorldDsdButton`）を追加する*
@@ -216,7 +216,7 @@ https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea7798
 > これらの API は両方とも安全ではありません。つまり、入力サニタイズを行いません。そのため、何を与えても安全であることを確認する必要があります。今後のリリースでは、入力のサニタイズを提供するバージョンを用意する予定です。
 > [Chrome 124 の新機能](https://developer.chrome.com/blog/new-in-chrome-124?hl=ja#dsd)
 
-まだWICGで検討段階の仕様ですが、将来的には`setHTMLUnsafe`や`parseHTMLUnsafe`が安全に使用できるようAPIが改善されたり、`setHTML`や`parseHTML`といったデフォルトでサニタイズしてくれるAPIが提供される見込みがあります。[^1]
+まだWICGで検討段階の仕様ですが、将来的には`setHTMLUnsafe`や`parseHTMLUnsafe`が安全に使用できるようAPIが改善されたり、`setHTML`や`parseHTML`といったデフォルトでサニタイズしてくれるAPIが提供される見込みがあります。[^2]
 
 ***
 
@@ -224,11 +224,11 @@ https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea7798
 
 ## まとめ
 
-DSDを使用することで、従来のShadow DOMを用いたWeb Componentsの構築手法に比べて、Progressive Enhancementで宣言的なWeb Componentsの構築の実現に近づきました。
+DSDを使用することで、従来のShadow DOMを用いたWeb Componentsの構築手法に比べて、JavaScriptが無効な環境でも動作使用可能な宣言的なWeb Componentsの構築の実現に近づきました。
 
 また、`setHTMLUnsafe`や`parseHTMLUnsafe`を使用することで、動的にDSDを追加することが可能になり、Web Componentsは利用範囲の広がりを見せてくれました。
 
-とはいえ、動的に追加されるDSDの安全性への懸念[^1]や、Custom Elementsの記述を宣言的にするDeclarative Custom ElementsやHTMLリソース（Custom Element、HTML Template、スタイルなど）をモジュールとしてexport/importするHTML Modulesに関する合意形成や実装など[^2]、まだまだ実用に至るには考慮事項が残されているようです。
+とはいえ、動的に追加されるDSDの安全性への懸念[^2]や、Custom Elementsの記述を宣言的にするDeclarative Custom ElementsやHTMLリソース（Custom Element、HTML Template、スタイルなど）をモジュールとしてexport/importするHTML Modulesに関する合意形成や実装など[^3]、まだまだ実用に至るには考慮事項が残されているようです。
 
 進化の目まぐるしいWeb Components、引き続き注目していきたいです💃🏻✨
 
@@ -242,5 +242,6 @@ DSDを使用することで、従来のShadow DOMを用いたWeb Componentsの�
 7. https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555
 8. https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md
 
-[^1]: [Sanitization Explainer](https://github.com/WICG/sanitizer-api/blob/main/explainer.md)
-[^2]: [Declarative Syntax for Custom Elements](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md)、[HTML Modules and Declarative Custom Elements Proposal](https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555)や[declarative-custom-elementsに関してfileされたIssue](https://github.com/search?q=repo%3AWICG%2Fwebcomponents+declarative-custom-elements&type=issues)を参照
+[^1]: Chrome 127のExperimental Featuresフラグを有効化、Chrome Canaryで確認できました
+[^2]: [Sanitization Explainer](https://github.com/WICG/sanitizer-api/blob/main/explainer.md)
+[^3]: [Declarative Syntax for Custom Elements](https://github.com/WICG/webcomponents/blob/gh-pages/proposals/Declarative-Custom-Elements-Strawman.md)、[HTML Modules and Declarative Custom Elements Proposal](https://gist.github.com/EisenbergEffect/8ec5eaf93283fb5651196e0fdf304555)や[declarative-custom-elementsに関してfileされたIssue](https://github.com/search?q=repo%3AWICG%2Fwebcomponents+declarative-custom-elements&type=issues)を参照
