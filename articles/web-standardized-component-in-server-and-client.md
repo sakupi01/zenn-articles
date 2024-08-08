@@ -149,13 +149,13 @@ https://github.com/sakupi01/ssred-webcomponents-app/blob/88892d0e9329c8e5cfb1b21
 1. HTMLElementを継承した`HelloWorldCE`クラスを作成
 2. Custom Elementの持つ機能を`connectedCallback`メソッド内で実装
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/web-components/hello-world/custom-element.ts#L1-L9
+https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/web-components/hello-world/custom-element.ts#L1-L9
 
 #### 3. クライアントサイドのエントリーポイント（`./src/client/index.tsx`）を作成
 1. `window.customElements.define`でCustom Elementを定義
 2. `./src/client/index.tsx`はビルド時に`./static/client.js`として出力する
 
-https://github.com/sakupi01/ssred-webcomponents-app/blob/7458cb78d082dca52ea77987a357d52997a37c68/src/client/index.tsx#L5-L8
+https://github.com/sakupi01/ssred-webcomponents-app/blob/5f2f6946dbc9fa8ca73e48202f7264e42cec9da6/src/client/index.tsx#L2-L7
 
 #### 4. `./static/client.js`を`<script>`タグで読み込む
 
