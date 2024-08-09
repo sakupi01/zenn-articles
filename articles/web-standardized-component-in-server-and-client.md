@@ -1,5 +1,5 @@
 ---
-title: "Declarative Shadow DOMを利用したWeb標準なコンポーネントをSSR・CSRで実現する"
+title: "Declarative Shadow DOMを利用したWeb ComponentsをSSR・CSRする"
 emoji: "🌓"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["frontend", "WebComponents", "DeclarativeShadowDOM", "CustomElements"]
