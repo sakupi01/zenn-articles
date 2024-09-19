@@ -46,7 +46,7 @@ https://biomejs.dev/blog/biome-v1-9/
 Biome 1.9がリリースされました。大きな変更としてはCSSのFormatter・Linterの安定版がリリースされ、GraphQLのFormatter・Linterのサポートも追加されました。
 加えて、`.edtiorconfig`のサポートや`biome search`コマンドの追加も行われています。
 
-CSSのLintに関しては、stylelintとの完全な互換はされていない部分がありそうで、今後のプラグインの拡充に期待です。
+CSSのLintに関しては、stylelintと互換性のあるルールが15個ほど採用されてはいるものの、現時点で完全な互換はされていないため、今後のルール拡充が期待されます。
 
 `biome search`は、構文木レベルで検索ができる新たなCLIになっています。似たツールとして[AST grep](https://github.com/ast-grep/ast-grep)などが挙げられます。
 
@@ -90,7 +90,7 @@ Next.jsのApp Routerへ移行する上で、EmotionからCSS Modulesへの移行
 
 CSSツール移行の過程で、Tagged Template LiteralをサポートしているなどEmotionと書き心地に互換性のあるPanda CSS、Pigment CSSなどを検討したそうですが、最終的には他ライブラリへの将来的な移行が比較的容易なCSS Modulesの採用に至ったそうです。
 
-CSS Modulesを使用する際のポイントとして、Happy CSS Modulesを採用し、CSSに対して型を生成することで、対象のCSSファイルにコードジャンプできるようにしていることが述べられていました。
+CSS Modulesを使用する際のポイントとして、[Happy CSS Modules](https://github.com/mizdra/happy-css-modules)を採用し、CSSに対して型を生成することで、対象のCSSファイルにコードジャンプできるようにしていることが述べられていました。
 
 ## ムーザルちゃんねる： Hono Webフレームワークの新しい選択肢
 
@@ -106,7 +106,7 @@ https://developer.chrome.com/blog/rfc-customizable-select
 
 https://x.com/una/status/1834275031926419648?s=46&t=ZKHFW4mhn8K-sTNo_SVqMQ
 
-スタイラブルな`<select>`要素を提供する、Customisable Select ElementがWHATWGのStage2になりました。
+スタイラブルな`<select>`要素を提供する、[Customisable Select Element](https://open-ui.org/components/customizableselect/)がWHATWGのStage2になりました。
 
 Chrome Canary 130のExperimental Web Platform Featuresフラグをonにすることで試すことができ、フィードバックが募られています。記事中では、新しい`<select>`要素のAnatomyや詳しいスタイル方法もまとめられています。
 
@@ -117,11 +117,11 @@ https://blog.date-fns.org/v40-with-time-zone-support/
 date-fns の v4 がリリースされました。
 v4では、従来のdate-fns-tzの置換となる、新しいIntl APIベースのタイムゾーン拡張した軽量なTime zones support が実装されました。
 
-## WebKitのMath.sumPreciseの実装が追加
+## Math.sumPreciseの実装がWebKitに追加
 
 https://github.com/WebKit/WebKit/pull/33707
 
-WebKitのMath.sumPreciseの実装のPRが出されていました。
+WebKitのMath.sumPreciseの実装のPRがマージされました。
 Math.sumPreciseの具体的なアルゴリズムは仕様で指定されていませんが、TC39の[@bakkot](https://github.com/bakkot)が作成したpolyfillをそのままC++で再実装する形になってるようです。
 
 ## Oracle, it’s time to free JavaScript.
@@ -129,7 +129,7 @@ Math.sumPreciseの具体的なアルゴリズムは仕様で指定されてい�
 https://javascript.tm/
 
 Oracleに対するJavaScriptの商標放棄を求める署名です。
-JS の商標はOracleが持っていますが、一般用語になったJSを商標登録していることに対して、「放棄してくれないと面倒だからパブリックにしてほしい」というものです。
+JS の商標はOracleが持っていますが、一般用語になったJSを商標登録していることに対して、「混乱を招くためパブリックにしてほしい」というものです。
 
 ## Breaking News: JSConf is Back and Joining the OpenJS Foundation
 
