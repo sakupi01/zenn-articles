@@ -90,7 +90,7 @@ Next.jsのApp Routerへ移行する上で、EmotionからCSS Modulesへの移行
 
 CSSツール移行の過程で、Tagged Template LiteralをサポートしているなどEmotionと書き心地に互換性のあるPanda CSS、Pigment CSSなどを検討したそうですが、最終的には他ライブラリへの将来的な移行が比較的容易なCSS Modulesの採用に至ったそうです。
 
-CSS Modulesを使用する上で、Happy CSS Modulesを使ってCSSファイルにコードジャンプできる形の型を生成しながら使っていることも述べられていました。
+CSS Modulesを使用する際のポイントとして、Happy CSS Modulesを採用し、CSSに対して型を生成することで、対象のCSSファイルにコードジャンプできるようにしていることが述べられていました。
 
 ## ムーザルちゃんねる： Hono Webフレームワークの新しい選択肢
 
