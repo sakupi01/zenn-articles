@@ -88,7 +88,7 @@ https://tech.findy.co.jp/entry/2024/09/09/090000
 
 Next.jsのApp Routerへ移行する上で、EmotionからCSS Modulesへの移行を行った過程の記事です。
 
-CSSツール移行の過程で、Tagged Template LiteralをサポートしているなどEmotionと書き心地に互換性のあるPanda CSS、Pigment CSSなどが検討したそうですが、最終的には他ライブラリへの将来的な移行が比較的容易なCSS Modulesの採用に至ったそうです。
+CSSツール移行の過程で、Tagged Template LiteralをサポートしているなどEmotionと書き心地に互換性のあるPanda CSS、Pigment CSSなどを検討したそうですが、最終的には他ライブラリへの将来的な移行が比較的容易なCSS Modulesの採用に至ったそうです。
 
 CSS Modulesを使用する上で、Happy CSS Modulesを使ってCSSファイルにコードジャンプできる形の型を生成しながら使っていることも述べられていました。
 
@@ -140,5 +140,5 @@ JSConf のブランドが OpenJS に所属することになったとのこと�
 
 # あとがき
 
-個人的追っていた Customisable Select Element が WHATWGでStage2 になったのが嬉しかったです。
+個人的に、追っていた Customisable Select Element が WHATWGでStage2 になったのが嬉しかったです。
 要素名の変更など様々な変遷を遂げてきた提案であり、まだフィードバックを募っている段階ですが、これまでパブリックに公開されていなかった詳しいスタイル方法なども遂にまとめられていたので、今後の進展が楽しみです🌈
