@@ -24,7 +24,7 @@ https://alvaromontoro.com/blog/68062/new-values-and-functions-in-CSS
 https://www.w3.org/TR/css-values-5/
 
 CSS Values and Units Module Level 5のWorking Draftリリースの紹介記事です。
-CSS Values and Units Module Level 5には[Level4](https://www.w3.org/TR/css-values-4/)から多くの機能が追加されており、その差分仕様となっています。
+Level 5には多くの機能が追加・拡張されており、[Level4](https://www.w3.org/TR/css-values-4/)との差分仕様としてまとめられています。
 `attr()`関数 や Chrome 129 Betaに入った`calc-size()`関数に関するspecもここに追加されていて、それぞれについてコードベースを交えつつ明快に説明されています。
 
 ## CSS Masonry & CSS Grid | CSS-Tricks
@@ -102,9 +102,10 @@ https://web.dev/blog/at-property-performance
 
 最近BaselineのNewly Availableとなった`@property` のベンチマークとったことに関する記事です。
 
-CSSのベンチマークを取るために[CSS Selector Benchmark](https://github.com/GoogleChromeLabs/css-selector-benchmark)というテストスイートを作成し、`@property` のパフォーマンスを測定しました。CSS Selector Benchmarkは、内部的にPerfTestRunnerというBlinkがパフォーマンステストに使用しているテストランナーを使用しているとのことです。
+CSSのベンチマークを取るために[CSS Selector Benchmark](https://github.com/GoogleChromeLabs/css-selector-benchmark)というテストスイートを作成し、`@property` のパフォーマンスを測定しました。
+テストランナーには、Chromiumの[PerfTestRunner](https://chromium.googlesource.com/chromium/src/+/refs/heads/main/docs/speed/benchmark/harnesses/blink_perf.md)を使用しており、これは、Chromium の基盤となるレンダリングエンジンである Blink が内部パフォーマンステストに使用しているものです。
 
-計測方法としては、`measureRunsPerSecond` メソッドを用いて、Blinkが秒間にStyleを再計算できる回数が多いほどパフォーマンスがいいとみなしています。
+計測方法としては、`measureRunsPerSecond` メソッドを用いて、1秒あたりのスタイルの再計算回数を測定し、多いほどパフォーマンスが良いと判断しています。
 
 結果として、一般的なカスタムプロパティは最も遅かったですが、UnRegistered（`inherit: false;`・`--unregistered`）状態のカスタムプロパティは最高速で、Registered（`inherit: true`;・`--registered` ）なカスタムプロパティよりも早かったとのことです。
 
