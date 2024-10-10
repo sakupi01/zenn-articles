@@ -68,7 +68,7 @@ typescript-eslintが、型情報を利用したlintの優位性や実際の使�
 
 https://voidzero.dev/posts/announcing-voidzero-inc
 
-Evan You が資金調達をして、VoidZero Inc.（void(0)）を立ち上げ、次世代 JS ツールチェーンを開発することが公表されました。
+Evan You氏 が資金調達をして、VoidZero Inc.（void(0)）を立ち上げ、次世代 JS ツールチェーンを開発することが公表されました。
 void(0)はオープンソースかつハイパフォーマンスな、JavaScriptエコシステムの統一的な開発者ツールを提供することを目指しています。
 
 ## Tauri 2.0 Stable Release
@@ -102,7 +102,7 @@ https://web.dev/blog/at-property-performance
 
 最近BaselineのNewly Availableとなった`@property` のベンチマークとったことに関する記事です。
 
-CSSのベンチマークを取るために[CSS Selector Benchmark](https://github.com/GoogleChromeLabs/css-selector-benchmark)というテストスイートを作成し、`@property` のパフォーマンスを測定しました。CSS Selector Benchmarkhttps://github.com/GoogleChromeLabs/css-selector-benchmarkは、内部的にPerfTestRunnerというBlinkがパフォーマンステストに使用しているテストランナーを使用しているとのことです。
+CSSのベンチマークを取るために[CSS Selector Benchmark](https://github.com/GoogleChromeLabs/css-selector-benchmark)というテストスイートを作成し、`@property` のパフォーマンスを測定しました。CSS Selector Benchmarkは、内部的にPerfTestRunnerというBlinkがパフォーマンステストに使用しているテストランナーを使用しているとのことです。
 
 計測方法としては、`measureRunsPerSecond` メソッドを用いて、Blinkが秒間にStyleを再計算できる回数が多いほどパフォーマンスがいいとみなしています。
 
