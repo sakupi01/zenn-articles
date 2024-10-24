@@ -1,5 +1,5 @@
 ---
-title: "TypeScriptの名前空間を活用したUIコンポーネントライブラリの設計と型安全性の追求"
+title: "TypeScriptの名前空間を活用したUIコンポーネントの設計と型安全性の追求"
 emoji: "📝"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["typescript"]
@@ -22,11 +22,18 @@ published: false
 
 みなさんもご存知の通り、TypeScriptは平たく言えばJavaScriptに型をつけた言語です。
 
-そしてご存知の通り、TypeScriptにおいて、型はトランスパイル時に削除されJavaScriptのコードには残りません。しかし、`const`や`enum`、`class`などはトランスパイル後も残ります。
-今回は「型」を「ランタイムに影響しない要素」として、`const`や`enum`、`class`などのような「値」を「ランタイムに影響する要素」としてお話します。
+そしてまたご存知の通り、TypeScriptにおいて、型はトランスパイル時に削除されJavaScriptのコードには残りません。しかし、`const`や`enum`、`class`などはトランスパイル後も残ります。
 
-早速ですが、みなさんはJSXやTSXを用いてUIコンポーネントを実装する際、どのようにコンポーネントを書いていますか？
-EcmaScript Modulesが広く使われるようになった今、多くの人は以下のようにコンポーネントを定義していると思いますし、実際私のチームでもこのような書き方でコンポーネントを定義しています。
+このように、ランタイムに影響しない要素とする要素を、「型」と「値」として区別します。
+
+- 「型」：トランスパイル時に削除されて「ランタイムに影響しない要素」
+- 「値」：JavaScriptのコードに残って「ランタイムに影響する要素」
+
+昨今の多くのプログラミング言語では、モジュールを用いて論理構造を適切に整理する技術用いられており、JavaScriptにおいてもECMAScript Modules（ESM）が広く使われるようになりました。
+一方で、TypeScriptでは「型」と「値」のモジュール化方法が異なるために、うまく実践できていないことがあります。
+
+例えば、みなさんはTSXでUIコンポーネントを実装する際、どのようにコンポーネントを書いていますか？
+多くの人は以下のようにコンポーネントを定義していると思いますし、私のチームでもこのような書き方でコンポーネントを定義しています。
 
 ```tsx:components/button.tsx
 export type ButtonProps = { ... };
@@ -35,14 +42,6 @@ export function Button(props: ButtonProps) { ... }
 ```
 
 こうした書き方をすることで、このようにButtonコンポーネントとそのPropsの型をインポートして以下のように使うことができます。
-
-```tsx:components/better-button.tsx
-import { Button, type ButtonProps } from "./button";
-
-export type FormButtonProps = ButtonProps & { ... };
-
-export function FormButton(props: FormButtonProps) { ... }
-```
 
 ```tsx:components/navigation-button.tsx
 import { Button, type ButtonProps } from "./button";
@@ -60,9 +59,9 @@ export type EnhancedNavigationButtonProps = ButtonProps & { ... };
 export function EnhancedNavigationButton(props: EnhancedNavigationButtonProps) { ... }
 ```
 
-ESMでネイティブにモジュールシステムを利用しているので、このように１ファイル１モジュールとしてコンポーネントを定義することが一般的です。
+ESMでネイティブにモジュールシステムを利用しているので、このように１ファイル１モジュールの中にPropsとコンポーネントを定義することが一般的です。
 
-しかし、このようなノリでコンポーネントやデータ型を定義していくと、やたら冗長な型名になってしまうことはよくあることだと思います。
+しかし、このようなノリでProps定義していくと、Props名がやたら冗長になってしまうことはよくあることだと思います。
 
 こうした事態になる背景として以下が考えられます。
 
@@ -70,98 +69,86 @@ ESMでネイティブにモジュールシステムを利用しているので�
    1. 例えば、`EnhancedNavigationButtonProps`という名前はEnhancedなNavigationのButtonコンポーネントのPropsであることを表現している
 2. 型が値に関するものであることを表現したい
    1. 1と関連するが、`ButtonProps`という名前はButtonコンポーネントのPropsであることを表現している
-3. Globalで名前の衝突を避けたい
-   1. 例えば、`ButtonProps`という名前は他のコンポーネントのPropsと名前が衝突しないようにするためにつけている
-   2. ❓./component/button.tsx と ./component/button2.tsx で同じ名前のPropsを定義して、それぞれ別々のコンポーネントでのみしか使用していない場合、名前はGlobalで衝突するのか？
+3. 1, 2を名前の衝突を防ぎつつ行いたい
 
-このように、名前の衝突を避けたりコンポーネントとの関係性を示したりするためにコンポーネント名を冠した名前をつけることが多いです。
+このように、名前の衝突を避けつつ、コンポーネントとの関連を示すPropsを定義するために、コンポーネント名を冠したProps名をつけることが多いです。
 
-しかし、こうした命名による解決策には限界があり、関連するデータが肥大化していくにつれ命名が複雑化していったり、コンポーネントのPropsの型を変更する際にコンポーネント名を変更する必要が出てくるなど、保守性の面でも問題が生じてくることは容易に想像し得ます。
+しかし、こうした命名による解決策には限界があります。
+関連するデータが肥大化していったり、多くの子コンポーネントを包含した親コンポーネントになるにつれ命名が複雑化していったりします。
+さらに、Propsの型を変更するのに合わせてコンポーネント名を変更する必要が出てくるなど、保守性の面でも問題が生じてくることは容易に想像し得ます。
 
-こうした背景事情を踏まえると、命名の工夫以外で、データの構造を表現しつつ、コンポーネントという「値」とそのPropsである「型」を一体化して管理する方法が必要になってきます。
+こうした背景事情を踏まえると、命名の工夫以外で、データの構造を表現しつつ、コンポーネントという「値」とそのPropsである「型」をセットで管理する方法が必要になってきます。
 
 ### 1. 型をモジュール化してネストされたデータ構造を表現する
 
-値においては、オブジェクトを使用したり、IIFE（即時実行関数式）を利用してスコープ制限を行ったりすることで、モジュールかを行うことができます。また、バレルファイルを利用して複数のモジュールから1つの便利なモジュールにエクスポートをロールアップして整理したりする方法もあります。
+値においては、オブジェクトを使用したり、IIFE（即時実行関数式）を利用してスコープ制限を行ったりすることで、モジュール化を行うことができます。また、[バレルファイル](https://typescript-jp.gitbook.io/deep-dive/main-1/barrel)を利用して複数のモジュールから1つの便利なモジュールにエクスポートをロールアップして整理したりする方法もあります。
 
 しかし、型のモジュール化はこのような方法では達成できず、TypeScriptで型をモジュール化する方法は、現時点では２通りの方法のみしかありません。
 
 1. ESMの`import as`
 2. TSの`namespace`
 
-まず、ESMの`import as`を使った方法を見ていきます。
+まず、ESM構文を使った方法を見ていきます。
 
 ```tsx
-// components/navigation/index.tsx
-// Buttonコンポーネントの定義
-export type Props = { ... };
-export function Button(props: Props) { ... }
+/**
+ * modules/types.ts
+ */
+export type LowerCase = 'a' | 'b' | 'c';
 
-// components/navigation/index.tsx
-// Navigationコンポーネントの定義
-import * as Button from './button';
-export * as Button from './button'; // Navigation.Button.Propsとするためにre-export
+/**
+ * modules/re-export.ts
+ */
+export * as Hoge from './modules/types';
 
-export type Props = Button.Props & { ... };
-export function Navigation(props: Props) { ... }
+/**
+ * example.ts
+ */
+import * as Sample from './modules/re-export';
 
-// components/enhanced-navigation/index.tsx
-// EnhancedNavigationコンポーネントの定義
-import * as Navigation from './navigation';
-
-export type Props = Navigation.Button.Props & { ... };
-export function EnhancedNavigation(props: Props) { ... }
+const text: Sample.Hoge.LowerCase = 'a';
 ```
 
 `import as`・`export as`を用いると、コンポーネントとそのPropsの型をひとつの変数にまとめてインポート・エクスポートすることができます。
 ECMAScript仕様では`import as`・`export as`によって作られる変数をモジュール名前空間オブジェクト (module namespace object) と呼びます。
 
-これでも実現できるのですが、`import as`では利用側で自由に名前をつけて import できてしまうことから一貫性が損なわれてしまうおそれがあります。
+これでも実現できるのですが、`import as`で利用側で自由に名前をつけて import できてしまうことから一貫性が損なわれてしまうおそれがあります。
 
-さらに、`Navigation.Button.Props` のようなネストされた型オブジェクトとして型を扱いたい場合、ESM形式ではre-exportを重ねる必要があります。
-ESMの仕様的にはおかしくないのですが、単にデータ構造を表現するためだけにそこまでファイル分割をしたくない場合には namespace を活用することが有効です。
+さらに、`Sample.Hoge.LowerCase` のようなネストされた型オブジェクトとして型を扱いたい場合、ESM形式では上記のようにre-exportを重ねる必要があり、単にデータ構造を表現するためだけにそこまでファイル分割をしたくないです。
+
+ここで、TSのnamespace構文を用いてnamespaceを作成することで同一ファイル内で型をモジュール化することができます。
 
 ```tsx
-// components/navigation/button/index.tsx
-// Buttonコンポーネントの定義
-export namespace ButtonProps {
-   export type Props = { ... };
+/**
+ * modules/sample.ts
+ */
+export namespace Sample {
+    namespace Hoge {
+        export type LowerCase = 'a' | 'b' | 'c';
+    }
 }
-export function Button(props: Props) { ... }
 
-// components/navigation/index.tsx
-// Navigationコンポーネントの定義
-import { ButtonProps, Button} from './button';
+/**
+ * example.ts
+ */
+import { Sample } from './modules/sample';
 
-export namespace NavigationProps {
-  export type Button = ButtonProps.Props;
-  export type Props = Button.Props & { ... };
-}
-export function Navigation(props: NavigationProps.Props) { ... }
-
-// components/enhanced-navigation/index.tsx
-// EnhancedNavigationコンポーネントの定義
-import {NavigationProps, Navigation} from './navigation';
-
-export namespace EnhancedNavigationProps {
-  export type Props = NavigationProps.Button.Props & { ... };
-}
-export function EnhancedNavigation(props: EnhancedNavigationProps.Props) { ... }
+const text: Sample.Hoge.LowerCase = 'a';
 ```
 
-### 2. 値と型を一体化して管理する
+### 2. 値と型をセットで管理する
 
 TypeScriptの利点の一つとして、値と型を別のものとして扱うことができるという点があります。
 
 例えば、これによって、もともとはJavaScriptで記述されたライブラリに後から型定義を追加することができるようになっています。
-DefinitelyTypedはその良い例です。
+[DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)はその良い例です。
 
-逆を言うと、値と型は別のものとして扱われるので、意識的に保守していかない限りは値と型の整合性が取れなくなるともいえます。
+逆を言うと、値と型は別のものとして扱われるので、先ほどのコンポーネントのように値と型の関連を保ちたい場合は、意識的に保守していく必要があります。
 
 この問題を回避するために、`class`を用いて値と型をセットで扱う方法もありますが、
-コンパニオンオブジェクトパターンを用いると、もっと手軽に値と型をセットで扱うことができます。
+TypeScriptの[コンパニオンオブジェクトパターン](https://typescriptbook.jp/tips/companion-object)を用いると、もっと手軽に値と型をセットで扱うことができます。
 
-このように、値と型を同名で定義することで値と型を一体化できます。
+以下のように、値と型を同名で定義することで値と型を一体化できます。
 
 ```tsx:components/button.tsx
 export type Button = { ... };
@@ -172,25 +159,35 @@ export function Button(props: Button) { ... }
 ```tsx:components/better-button.tsx
 import { Button } from "./button";
 
+// Button型として
 export type Props = Button & { ... };
 
-export function BetterButton(props: Props) { ... }
+export function BetterButton(props: Props) { 
+  // Buttonコンポーネントとして
+  return <Button {...props} className={{ ... }} />;
+ }
 ```
 
-コンパニオンオブジェクトパターンは、上記のようなtypeとfunctionの組み合わせのみならず、以下のような組み合わせでも利用することができます。
+<!-- コンパニオンオブジェクトパターンは、上記のようなtypeとfunctionの組み合わせのみならず、以下のような組み合わせでも利用することができます。
 
 - type + function
 - const + type
 - class + namespace
 - type + namespace
-- const + type + namespace
+- const + type + namespace -->
 
 ### 3. 型のモジュール化+値と型の一体化でUIコンポーネントを設計する
 
-1. namespaceを用いてデータ型の構造をモジュールで表現する方法
-2. コンパニオンオブジェクトパターンで値と型を一体化して管理する方法
+これまでに、以下の２つの方法を紹介しました。
 
-する方法を見ていきました。これらの方法を組み合わせることで、データ型の構造をモジュールで表現しつつ、値と型を一体化して管理することができます。
+1. namespaceを用いてデータ型の構造をモジュールで表現する
+2. コンパニオンオブジェクトパターンで値と型をセットで管理する
+
+これらの方法を組み合わせることで、データ型の構造をモジュールで表現しつつ、値と型を一体化して管理することができます。
+
+まず、ButtonのProps、`Button.Props`という表現をしたいので、namespaceを用いてProps型をモジュール化します。
+
+さらに、namespaceとコンポーネントをセットで管理するために、コンパニオンオブジェクトパターンを用いて、namespaceとコンポーネントを同名で定義します。
 
 ```tsx:components/button.tsx
 export namespace Button {
@@ -200,6 +197,8 @@ export namespace Button {
 export function Button(props: Button.Props) { ... }
 ```
 
+そうすると、以下のように、`Button.Props`として型の構造を表現しつつ、ButtonコンポーネントとそのPropsの型をセットで管理することができます。
+
 ```tsx:components/better-button.tsx
 import { Button } from "./button";
 
@@ -207,10 +206,12 @@ export namespace BetterButton {
   export type Props = Button.Props & { ... };
 }
 
-export function BetterButton(props: BetterButton.Props) { ... }
+export function BetterButton(props: BetterButton.Props) { 
+  return <Button {...props} className={{ ... }} />;
+ }
 ```
 
-さらに、namespace内には他の型定義や関数を定義することもできるため、コンポーネントに関連する型定義や関数を一箇所にまとめることができます。
+さらに、namespace内には他の型定義をすることもできるため、コンポーネントに関連する型定義を一箇所にまとめることができます。
 
 ```tsx:components/button.tsx
 export namespace Button {
@@ -225,8 +226,12 @@ export namespace Button {
 export function Button(props: Button.Props) { ... }
 ```
 
-### ネストした型Objectを実現したいとき
+## まとめ
 
-全てのファイルを一モジュールとして扱うESModules形式でこれを再現しようとすると、ネストの代わりにre-exportを重ねる必要があり、そこまでファイルを分割管理したくない場合にはnamespaceを活用することになります。
+TypeScriptのnamespaceを活用することで、データ型の構造をモジュールで表現しつつ、値と型を一体化して管理することができます。
 
-使用できそうな箇所は少ないですが、UIコンポーネントの設計においては一定の有用性があると考えられます。
+これにより、コンポーネントに関連する型定義や関数を一箇所にまとめることができるため、コンポーネントの保守性を向上させることができます。
+
+また、namespaceを用いることで、コンポーネントとそのPropsの型を一体化して管理することができるため、コンポーネントのPropsの型を変更する際にコンポーネント名を変更する必要がなくなり、コンポーネントの保守性を向上させることができます。
+
+TypeScriptのnamespaceは使用箇所がどうしても限られそうな機能ですが、UIコンポーネントの設計においては一定の有用性があるかもしれません。
