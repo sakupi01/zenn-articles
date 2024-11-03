@@ -118,7 +118,7 @@ https://github.com/saku-1101/design-patterns-demo/blob/6d2d1f5e3dd6722b514098a40
 さらに、高階コンポーネントは**合成**することもできます。
 たとえば、すでに上記で状態表示機能が施されたカードコンポーネントをホバーしたときに
 - Do you want me?😘
-![ホバー時の挙動](/images/image.png)
+![ホバー時の挙動](/images/image2.png)
 
 というメッセージが出現する機能を追加したいとします。
 これを `withHover`HOC を用いて実現すると、次のようになります。
