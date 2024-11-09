@@ -108,6 +108,7 @@ Promise.try(syncOrAsync())
 ### Bluebird [Promise.try/Promise.attempt](http://bluebirdjs.com/docs/api/promise.try.html)
 
 <!-- demoしてもいいかも -->
+内部的には③の「新しくPromiseを生成して、そのなかでsync/asyncな関数を解決する方法」を採用しています。
 
 ```js
 // https://github.com/petkaantonov/bluebird/blob/master/src/method.js
@@ -137,7 +138,23 @@ Promise.attempt = Promise["try"] = function (fn) {
 };
 ```
 
-以下のようにして使用できる。
+本質的に関数の実行に必要な部分は以下のみで、それ以外はデバッグやエラーハンドリングのための処理です。
+
+```js
+Promise.attempt = Promise["try"] = function (fn) {
+    // 新しいPromiseを生成: new Promise()部分
+    var ret = new Promise(INTERNAL);
+    
+    // 関数を実行して値を取得: try-catchを使用してより安全に
+    var value = tryCatch(fn)();
+    
+    // 値を解決: resolve(syncOrAsync())部分. ResolveされたPromiseを返す
+    ret._resolveFromSyncValue(value);
+    return ret;
+}
+```
+
+以下のようにして使用します。
 
 ```js
 function getUserById(id) {
@@ -152,7 +169,7 @@ function getUserById(id) {
 
 ### [`p-try`](https://github.com/sindresorhus/p-try) by Sindre Sorhus
 
-内部的には③の「新しくPromiseを生成して、そのなかでsync/asyncな関数を解決する方法」を採用している。
+内部的には③の「新しくPromiseを生成して、そのなかでsync/asyncな関数を解決する方法」を採用しています。
 ③の方法は書き方が冗長だったというだけで、`Promise.try()`の実現したいことはできていたので、冗長な書き方部分を`pTry`として提供しているだけです。
 
 ```js
@@ -164,7 +181,7 @@ export default async function pTry(function_, ...arguments_) {
 }
 ```
 
-以下のようにして使用できる。
+以下のようにして使用します。
 
 ```js
 import pTry from 'p-try';
@@ -187,7 +204,11 @@ pTry(() => {
  });
 ```
 
-## JSCに実装されたPromise.try
+このように、Bluebirdや`p-try`のようなライブラリはどちらも③の「新しくPromiseを生成して、そのなかでsync/asyncな関数を解決する方法」をベースに実装されているようです。
+
+## Dive in to Promise.try in JSC
+
+次に、WebkitのJavaScriptエンジンであるJSCに実装された`Promise.try()`の実装を見てみましょう。
 
 [[JSC] Implement Promise.try #24802](https://github.com/WebKit/WebKit/pull/24802)
 
