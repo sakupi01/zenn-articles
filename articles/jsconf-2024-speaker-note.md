@@ -208,15 +208,29 @@ pTry(syncOrAsync()).then(console.log).catch(console.error);
 
 ## Dive in to Promise.try in JSC
 
-WebkitのJavaScriptエンジンであるJSCに実装された`Promise.try()`の実装を見てみます。
+WebkitのJavaScriptエンジンであるJSCに実装された`Promise.try()`の実装はめちゃくちゃ短くて簡潔だったので、逆にPromise.tryを取り巻くJSの仕様の話とか仕様のInternalな話を深く見ていくことにしました。
+
+### Promise.tryの実装仕様
+
+- コールバックとそれに渡す引数のリスト(...args)を受け取る
+- this(通常はPromise)がオブジェクトでない場合はTypeErrorとする
+- newPromiseCapabilityでC (this)を使って新しい**PromiseCapability promiseCapability**を生成する
+- `Call(callback, value, ...args)`でコールバックに引数のリストを渡して実行。`Completion()`で返されたCompletion Recordをstatusに格納する
+- statusがabrupt completion（Normal以外の状態で、エラーなどが出ている場合）であれば、`promiseCapability`のrejectにabrupt completionのstatusを渡して実行する。
+- そうでない場合（statusがNormalな場合）は、`promiseCapability`のresolveに任意のcompletionのstatusを渡して実行する。
+- `promiseCapability`のpromiseを返す
+
+![CompletionRecord](image.png)
+
+![PromiseCapabilityRecord](image-1.png)
+
+これに基づいて、JSCもV8もSpiderMonkeyも実装されていくのですが、今回はJSCに焦点を当てて見ていきます。
 
 [[JSC] Implement Promise.try #24802](https://github.com/WebKit/WebKit/pull/24802)
-[[promise-try] Implement and stage Promise.try](https://github.com/v8/v8/commit/dd9e9aef970a9f60d607c88e6f875d4d1cdfaca1#diff-4a6fd4b52213c38fb444e9a5dbd20d924b72714aa70c321f4524f936ede143e1R5)
 
 JSCはC++で実装されており、JavaScriptでの実装にはC++で書かれた内部関数を呼び出すための特別な構文を使用していることがあります。
 
 `Promise.try`も実装にJavaScriptが使用されているものの1つですが、JSC独自のシンタックスシュガーを使用して、最終的にはC++で処理できるようになっています。
-<!-- 本当か？という感じなので、具体的なC++の実装にたどり着くまで追ってみます。 -->
 以下はJSCにおける`Promise.try()`の実装です。
 
 ```js
@@ -264,9 +278,14 @@ Promiseに関する必要な処理は大体ここ（[WebKit/Source/JavaScriptCor
 
 このように、`Promise.try()`は`Promise.resolve()`を用いて実装できますが、`Promise.try()`としてJSCに実装されることにより、よりコンパイラレベルでの最適化がなされた状態で`Promise.try()`を使用できるようになります。
 
-<!-- Promise.tryがどうして8年もかかったのか聞きたい -->
+## 8 Years of Journey to Stage4
+
+サードパーティの圧力によってproposalが動く
+Jordanに聞いたことを書く
 
 ## 昨今のECMAScriptのPromise動向
+
+サクッと出てるproposalを紹介する
 
 最後に、ECMAScriptにおけるPromiseの全体像と今後の動向についてProposalを参考に見ていきましょう。
 
@@ -304,6 +323,7 @@ Promiseを意識することなく、非同期処理を行なうための提案�
 [@throwTypeError](https://github.com/WebKit/WebKit/blob/09a39c7410120fcf29cdb6310eabad53edaba847/Source/WebCore/bindings/js/JSDOMExceptionHandling.cpp#L214)
 [@newPromiseCapabilitySlow](https://github.com/WebKit/WebKit/blob/09a39c7410120fcf29cdb6310eabad53edaba847/Source/JavaScriptCore/builtins/PromiseOperations.js#L55)
 https://github.com/tc39?q=promise&type=all&language=&sort=
+[[promise-try] Implement and stage Promise.try](https://github.com/v8/v8/commit/dd9e9aef970a9f60d607c88e6f875d4d1cdfaca1#diff-4a6fd4b52213c38fb444e9a5dbd20d924b72714aa70c321f4524f936ede143e1R5)
 
 https://claude.ai/chat/19f3d834-785e-427f-8353-97fa9a25d776
 https://promisesaplus.com/
