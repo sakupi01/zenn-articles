@@ -1,5 +1,5 @@
 ---
-title: "Interop 2025, CSS if()・Custom Functions・ Invoker CommandsのShipなど" # 目立ったニュースを選ぶ
+title: "Interop 2025, CSS 新機能の Ship など: Cybozu Frontend Weekly (2025-03-04号)" # 目立ったニュースを選ぶ
 emoji: "🌟" # お好きな絵文字を
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["CybozuFrontendWeekly", "frontend"]
