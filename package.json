@@ -1,5 +1,5 @@
 {
-  "name": "zenn-articles",
+  "name": "@sakupi01/zenn-articles",
   "version": "1.0.0",
   "description": "zenn articles & its MCP Server",
   "type": "module",
@@ -9,7 +9,7 @@
   "bin": {
     "sakupi01-zenn-articles": "./build/local.js"
   },
-  "files": ["src/", "build/"],
+  "files": ["build/"],
   "scripts": {
     "preview": "npx zenn preview --port 3333",
     "new:article": "npx zenn new:article",
@@ -23,7 +23,8 @@
     "cf:deploy": "wrangler deploy",
     "cf:dev": "wrangler dev",
     "cf:start": "wrangler dev",
-    "cf:typegen": "wrangler types"
+    "cf:typegen": "wrangler types",
+    "release": "standard-version"
   },
   "keywords": ["mcp", "zenn"],
   "homepage": "https://github.com/sakupi01/zenn-articles",
@@ -35,6 +36,9 @@
     "url": "https://github.com/sakupi01/zenn-articles.git"
   },
   "author": "sakupi01",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.4",
     "@textlint/textlint-plugin-markdown": "^13.4.1",
@@ -47,7 +51,6 @@
     "@biomejs/biome": "1.9.4",
     "@cloudflare/workers-types": "^4.20250517.0",
     "@types/express": "^5.0.2",
-    "standard-version": "^9.5.0",
     "textlint": "^14.0.4",
     "textlint-filter-rule-comments": "^1.2.2",
     "textlint-rule-no-dropping-the-ra": "^3.0.0",
