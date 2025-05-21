@@ -23,6 +23,12 @@ jobs:
         # these if statements ensure that a publication only occurs when
         # a new release is created:
         if: ${{ steps.release.outputs.release_created }}
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          run_install: false
+        if: ${{ steps.release.outputs.release_created }}
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
