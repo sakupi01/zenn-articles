@@ -9,9 +9,7 @@
   "bin": {
     "sakupi01-zenn-articles": "./build/local.js"
   },
-  "files": [
-    "build/"
-  ],
+  "files": ["build/"],
   "scripts": {
     "preview": "npx zenn preview --port 3333",
     "new:article": "npx zenn new:article",
@@ -20,7 +18,7 @@
     "test": "vitest run",
     "lint:fix": "biome lint --write",
     "fmt:fix": "biome format --write",
-    "build": "tsc -p .",
+    "build": "tsc -p . && cp -r src/prompts/resources build/prompts/",
     "watch": "tsc -p . --watch",
     "cf:deploy": "wrangler deploy",
     "cf:dev": "wrangler dev",
@@ -28,10 +26,7 @@
     "cf:typegen": "wrangler types",
     "release": "standard-version"
   },
-  "keywords": [
-    "mcp",
-    "zenn"
-  ],
+  "keywords": ["mcp", "zenn"],
   "homepage": "https://github.com/sakupi01/zenn-articles",
   "bugs": {
     "url": "https://github.com/sakupi01/zenn-articles/issues"

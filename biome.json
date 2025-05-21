@@ -28,6 +28,12 @@
       "**/*.md",
       "**/*.html"
     ],
-    "ignore": ["dist/**", "node_modules/**", "coverage/**", "**/generated/**"]
+    "ignore": [
+      "dist/**",
+      "node_modules/**",
+      "coverage/**",
+      "**/generated/**",
+      "worker-configuration.d.ts"
+    ]
   }
 }
