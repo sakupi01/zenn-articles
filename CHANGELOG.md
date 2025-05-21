@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/sakupi01/zenn-articles/compare/v1.2.0...v1.2.1) (2025-05-21)
+
+
+### Bug Fixes
+
+* docker publish workflow trigger ([e198a7d](https://github.com/sakupi01/zenn-articles/commit/e198a7d711495746c987737ada6e928f6e51b317))
+
 ## [1.2.0](https://github.com/sakupi01/zenn-articles/compare/v1.1.0...v1.2.0) (2025-05-21)
 
 
