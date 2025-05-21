@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/sakupi01/zenn-articles/compare/v1.1.0...v1.2.0) (2025-05-21)
+
+
+### Features
+
+* dockerfile ([b5ed341](https://github.com/sakupi01/zenn-articles/commit/b5ed3413942f03ae6b6c218d8f46300f6a2ca381))
+* publish docker image ([375193b](https://github.com/sakupi01/zenn-articles/commit/375193bc36282fa5e472a946b81bf6ba7a18bd33))
+
 ## [1.1.0](https://github.com/sakupi01/zenn-articles/compare/v1.0.3...v1.1.0) (2025-05-21)
 
 
