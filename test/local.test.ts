@@ -51,8 +51,6 @@ describe("Sakupi01 Zenn MCP Server", () => {
       },
     });
 
-    console.log(response.content);
-
     expect(response.content).toStrictEqual([
       {
         type: "text",
