@@ -9,7 +9,9 @@
   "bin": {
     "sakupi01-zenn-articles": "./build/local.js"
   },
-  "files": ["build/"],
+  "files": [
+    "build/"
+  ],
   "scripts": {
     "preview": "npx zenn preview --port 3333",
     "new:article": "npx zenn new:article",
@@ -26,7 +28,10 @@
     "cf:typegen": "wrangler types",
     "release": "standard-version"
   },
-  "keywords": ["mcp", "zenn"],
+  "keywords": [
+    "mcp",
+    "zenn"
+  ],
   "homepage": "https://github.com/sakupi01/zenn-articles",
   "bugs": {
     "url": "https://github.com/sakupi01/zenn-articles/issues"
