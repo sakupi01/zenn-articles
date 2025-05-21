@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/sakupi01/zenn-articles/compare/v1.0.2...v1.0.3) (2025-05-21)
+
+
+### Bug Fixes
+
+* add id-token permission for provenance release ([e975e75](https://github.com/sakupi01/zenn-articles/commit/e975e7559c6fa2c0282be1e502b6eb1332f056dd))
+
 ## [1.0.2](https://github.com/sakupi01/zenn-articles/compare/v1.0.1...v1.0.2) (2025-05-21)
 
 
