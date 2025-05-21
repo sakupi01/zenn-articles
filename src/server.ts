@@ -1,4 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { registerAllPrompts } from "./prompts/index.js";
 import { registerBlogSearchTool } from "./tools/articles-search.js";
 import type { Blog } from "./types.js";
 
@@ -16,6 +17,9 @@ export const createSakupi01ZennMCPServer = (fixtures?: {
 
   // Register all tools
   registerBlogSearchTool(server, fixtures?.blogs);
+
+  // Register all prompts
+  registerAllPrompts(server);
 
   return server;
 };
