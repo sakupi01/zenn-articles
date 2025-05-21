@@ -1,27 +1,61 @@
 {
   "name": "zenn-articles",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "zenn articles & its MCP Server",
+  "type": "module",
+  "main": "build/local.js",
+  "types": "build/local.d.ts",
+  "exports": "./src/local.ts",
+  "bin": {
+    "sakupi01-zenn-articles": "./build/local.js"
+  },
+  "files": ["src/", "build/"],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "preview": "npx zenn preview --port 3333",
     "new:article": "npx zenn new:article",
     "textlint": "textlint \"**/*.md\"",
-    "textlint:fix": "textlint \"**/*.md\" --fix"
+    "textlint:fix": "textlint \"**/*.md\" --fix",
+    "test": "vitest run",
+    "lint:fix": "biome lint --write",
+    "fmt:fix": "biome format --write",
+    "build": "tsc -p .",
+    "watch": "tsc -p . --watch",
+    "cf:deploy": "wrangler deploy",
+    "cf:dev": "wrangler dev",
+    "cf:start": "wrangler dev",
+    "cf:typegen": "wrangler types"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["mcp", "zenn"],
+  "homepage": "https://github.com/sakupi01/zenn-articles",
+  "bugs": {
+    "url": "https://github.com/sakupi01/zenn-articles/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sakupi01/zenn-articles.git"
+  },
+  "author": "sakupi01",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.4",
     "@textlint/textlint-plugin-markdown": "^13.4.1",
-    "zenn-cli": "^0.1.154"
+    "agents": "^0.0.88",
+    "express": "^5.1.0",
+    "zenn-cli": "^0.1.154",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@cloudflare/workers-types": "^4.20250517.0",
+    "@types/express": "^5.0.2",
+    "standard-version": "^9.5.0",
     "textlint": "^14.0.4",
     "textlint-filter-rule-comments": "^1.2.2",
     "textlint-rule-no-dropping-the-ra": "^3.0.0",
     "textlint-rule-preset-ja-technical-writing": "^10.0.1",
-    "textlint-rule-preset-smarthr": "^1.31.0"
-  }
+    "textlint-rule-preset-smarthr": "^1.31.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4",
+    "wangler": "^0.0.7"
+  },
+  "packageManager": "pnpm@10.11.0"
 }

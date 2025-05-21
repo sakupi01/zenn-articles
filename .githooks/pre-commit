@@ -1,0 +1,3 @@
+#!/bin/sh
+pnpm fmt:fix
+pnpm lint:fix
