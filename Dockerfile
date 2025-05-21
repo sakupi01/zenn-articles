@@ -9,10 +9,9 @@ RUN npm install -g pnpm@10.11.0
 # Copy dependency files
 COPY package.json pnpm-lock.yaml* ./
 
-# Copy source code and build files
+# Copy source code and configuration files
 COPY tsconfig.json ./
 COPY src/ ./src/
-COPY build/ ./build/
 
 # Install dependencies and build the application
 RUN pnpm install --frozen-lockfile && \
