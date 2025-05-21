@@ -1,22 +1,18 @@
 import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as z from "zod";
-
-// Get the directory of the current module
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Register the frontend weekly prompt with the server
  * @param server MCP Server instance
  */
 export const registerFeWeeklyPrompt = (server: McpServer) => {
+  const promptFilePath = new URL(
+    "./resources/weekly.prompt.md",
+    import.meta.url,
+  ).pathname;
   // Read the prompt template from the file
-  const promptTemplate = fs.readFileSync(
-    path.resolve(__dirname, "resources/weekly.prompt.md"),
-    "utf-8",
-  );
+  const promptTemplate = fs.readFileSync(promptFilePath, "utf-8");
 
   server.prompt(
     "fe-weekly",
