@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/sakupi01/zenn-articles/compare/v1.0.1...v1.0.2) (2025-05-21)
+
+
+### Bug Fixes
+
+* remove pnpm version ([8bc1d3f](https://github.com/sakupi01/zenn-articles/commit/8bc1d3f267217ebf579ac80af1406fe191793ecc))
+
 ## [1.0.1](https://github.com/sakupi01/zenn-articles/compare/v1.0.0...v1.0.1) (2025-05-21)
 
 
