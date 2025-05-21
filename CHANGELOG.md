@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/sakupi01/zenn-articles/compare/v1.0.3...v1.1.0) (2025-05-21)
+
+
+### Features
+
+* fetch from remote ([a6b8f9b](https://github.com/sakupi01/zenn-articles/commit/a6b8f9b1463934ed8ed6f323187aaecd076bc775))
+* prompt ([b4a9991](https://github.com/sakupi01/zenn-articles/commit/b4a9991bfe829e546415f2b04bac183d9ea4d862))
+
+
+### Bug Fixes
+
+* use import.meta.url ([edaa86d](https://github.com/sakupi01/zenn-articles/commit/edaa86da165faf5723ba9dd9dbe87fbb79ffca16))
+
 ## [1.0.3](https://github.com/sakupi01/zenn-articles/compare/v1.0.2...v1.0.3) (2025-05-21)
 
 
