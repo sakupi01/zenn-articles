@@ -1,6 +1,6 @@
 {
   "name": "@sakupi01/zenn-articles",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "zenn articles & its MCP Server",
   "type": "module",
   "main": "build/local.js",

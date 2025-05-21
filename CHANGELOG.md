@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/sakupi01/zenn-articles/compare/v1.0.0...v1.0.1) (2025-05-21)
+
+
+### Bug Fixes
+
+* pnpm setup ([d19b764](https://github.com/sakupi01/zenn-articles/commit/d19b7642dbfec6f74b76b4ed5f334c9c8575a62b))
+
 ## 1.0.0 (2025-05-21)
 
 
