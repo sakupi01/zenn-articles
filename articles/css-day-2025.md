@@ -139,8 +139,8 @@ Google は社員に質問できるコーナーを設けており、話したか�
 
 ![質問できるコーナー](/images/help-desk.jpg)
 
-CSSDay での Google お家芸（？）の「What's Missing Missing in HTML & CSS ?」も催されていました。
-![What's Missing Missing in HTML & CSS ?](/images/whats-missing.jpg)
+CSSDay での Google お家芸（？）の「What's Missing Missing from HTML & CSS ?」も催されていました。
+![What's Missing Missing from HTML & CSS ?](/images/whats-missing.jpg)
 
 また、飲み物や軽食が常時提供されており、その周りで参加者同士の交流も活発に行われていました。
 
