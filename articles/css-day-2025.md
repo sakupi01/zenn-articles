@@ -161,90 +161,130 @@ Form Control Styling の FPWD が公開されたことは、個人的にもと�
 
 https://noti.st/anarodrigues/abfj0M/refactoring-css
 
-## 🌏 The goose and the common by Bruce Lawson
+## 🌏 The goose and the commons by Bruce Lawson
+
+最後は CSS というか Web の健全性について、Vivaldi ブラウザの Bruce Lawson によるトークでした。
+
+タイトルの「The goose and the commons」は、ことわざで、「共有資源の私有化」を意味します。Web という共有資源に対して、Big Tech が与えてきた影響と、現在の Web を取り巻く社会情勢について警鐘を鳴らす内容でした。
+
+PWA という対ネイティブの夢を十分にサポートせず、iOS 市場に独占の姿勢を見せる Apple に対抗して Open Web Advocacy が立ち上がり、これが EU での CMA(Competition and Markets Authority) による調査、DMA(Digital Market Authority) による規制に繋がった流れを振り返ります。
+その一連への報復として Apple の PWA サポート取りやめがあり、対して Open Web Advocacy が多くの署名をもとに反対の声を上げ、その結果、iOS の WebKit 縛りは残るものの、 Apple の PWA サポート継続に至ったと言います。
+
+その他のベンダにもテンションがかかる状態であり、MS は EU で Edge のダウンロードを促すプロンプトを削除、Google は US で DOJ(Department of Justice) から Chrome の分社化を求められており、Google が資金源の Mozilla にも影響を与える可能性がある点など、Web の健全性を脅かす事例が多くあることを指摘していました。
+
+トークの最後には、我々が PWA を作ることを検討し、規制当局に懸念を伝えることで、Big Tech 同士が押し潰し合い、Web が壊れるようなことは避けたいとしていました。
 
 https://speakerdeck.com/brucel/cssday-amsterdam
+
+![alt text](image-5.png)
+
+会場には主要なブラウザベンダから多くの人が参加しており、
+また、CSS ではないものの、このトークに関心が寄せられ、採択され、カンファレンスの砦に持ってこられるくらいには、 EU 圏の人々が Web の健全性に対して意識が高いことを感じました。
 
 ---
 
 # Discussions
 
-セッションの合間などに、複数のスピーカーや参加者の方とお話しすることができました。
+セッションの合間などに、複数のスピーカーや参加者の方とお話しすることができました。それぞれの軽い紹介と、実際に話した内容をメモ程度に書いておきます。
+
+（※ なお、カジュアルトークも含まれており、話者間の推測や根拠に欠ける情報も含まれているので、100 % 正しい情報として受け取らないでいただけると幸いです）
 
 ## Rachel Andrew & Philip Walton
 
-Rachel 的にも Widely Available を使うっていう判断は間違ってないって感じだった。もし Widely Availbale の説明がしにくいとか、既存のアクセスログをベースにした閾値から移行しにくいなら、独自の Baseline でどのくらいサポートできるのかで説明できるようにするといい。いずれにせよ、ブラウザバージョンごとじゃなくて Baseline を使うことを推していた。この記事が参考になるよとのこと。baselin-checker か〜
+Rachel Andrew: Google の CSS系 DevRel。Baseline もやっている。CSSWG では、Reading Flow や Multicolumn、Masonly などレイアウト周りをよく担当していると思う。
+Philip Walton: Google. baseline-checker の作者。（[CSS Architecture](https://philipwalton.com/articles/css-architecture/) で有名な印象）
 
-[ちなみにweb.dev](http://ちなみにweb.dev) とか firebase とか Google 内でのサービスはどうしてるの？に関しては、特に Baseline は使ってなくて開発チームの裁量に任されているみたい
-
-https://web.dev/articles/how-to-choose-your-baseline-target
+- ❓ : 最近社内でブラウザのサポートバージョンどこまで担保する？の話をしているので聞いた
+- Rachel 的にも 「Widely Available を使うっていう判断」は間違ってないって感じだった。「[How to choose your Baseline target](https://web.dev/articles/how-to-choose-your-baseline-target)」が参考になるよとのこと。
+- Philip 的には、もし Widely Available や Baseline の説明がしにくいとか、既存のログをベースにした閾値から移行しにくいなら、独自の Baseline でどのくらいサポートできるのかで説明できるようにするといいという感じだった。独自の Baseline を決めれるように baseline-checker というツールを作ったから使ってね。（ここで、まさかの作者だったことが発覚）
+- ただ、baseline-checker は Google Analytics 専用だから、いい感じに真似して独自のものを実装してみてね、とのこと。
+- いずれにせよ、ブラウザごとのバージョンじゃなくて Baseline を使うことを推していた。
+- web.dev とか firebase とか Google のサービスはどうしてるの？に関しては、特に Baseline は使ってなくて開発チームの裁量に任されているみたい。正確なところはわからないみたいな感じだった。
 
 ## Una Kravets
 
-- Carousel は HMTL でも再考されている。TBD。CSS で最初に作られたのはselectの ::picker とかと一緒な感じ。
-- でも CSS is Optional の考え方に基づいて情報が落ちるとかはないからみたいな話で確かにそれはそうかとなった。
-- 和柄のガーゼハンカチと赤ちゃん用のボーロあげたらめっちゃ喜んでくれた
-- Do you also have a baby?! って言われたのがウケたw
+Google の CSS 系 DevRel。I/O でよく 「What's New in Web UI」とかをしている。
+
+- ❓ : Carousel in CSS、どうなの？の話
+- 賛否両論の意見が出てきている段階であり、HTML でも再考されている。TBD。
+- 擬似要素とかをゴリゴリ作って CSS でやるというふうになったのは、 既存の任意 HTML セマンティクスをベースにしつつ、柔軟に「カルーセルデザイン」を当てるという思想で始まったからという感じだった
+- Customizable Select Element の `::picker()` とかと一緒なイメージらしい
 
 ## Eric Leese
 
-- if() と @function では確かに今動かないよな〜というのを [kizu.dev](http://kizu.dev) のデモを一緒に確認しながら確かめた。
-- でも upcoming だよとのこと。Chrome Canary で試せる
-- こういう devtools に欲しい機能とかってどこに言えばいいの？と聞いたら、crbug に issue 投げてくれるといいよ or DM でとのこと。
+Chrome の DevTools の人。
 
-![alt text](image-3.png)
+- `if()` とか `@function` ってデバッグしたくなると思うんだけど、DevTools での対応どうなの？の話
+- 確かに Dev では今動かないよな〜というのを [kizu.dev](http://kizu.dev) のデモを一緒に確認しながら確かめた。
+- でも upcoming だよとのこと。Chrome Canary で `if()` とか `@function` ってデバッグ試せるので試してた
+- こういう DevTools に欲しい機能とかってどこに言えばいいの？と聞いたら、crbug に issue 投げてくれるといいよ or DM でとのこと。
 
 ## Miriam Suzanne
 
-- まず、全てにおいてスモールスタートから始めるべき。そこから拡充。fork して、全部やったよ、はコストがかかりすぎる新しい機能が多い
-- CascadeLayers: Reset CSS 入れるなら絶対使う。@layer 自体もそうデザインされている。@layer したものよりもしてないものが優位なので、段階的に導入しやすいデザインになっている。
-- nesting はまあいっぱい使って
-- @scope はきくの忘れてたけど多分よく言われてるやり方？ドーナツ作るとか？多分明日 Chris が話す
-- container queries はデバッガブルなので
-- if, function のデバッグはきてる
-- custom property, function, mixin はトークン化したいしたほうがいいけど、figmaが… 。
-  - mia のところでは SSOT は CSS ファイルにしている。 figma での管理は視覚的に確認したりデザイナと共有したいものだけする。
-- Figma に関してはこれをお勧めされた：https://www.moonlearning.io/
-- まっっっっっっっっっっっじでいい人。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。
+Sass. CascadeLayers, Container Queries, Scope, if/function/mixin.
+
+- ❓ : CSS 設計全体を見直す必要があるような機能追加が多いけど、どう取り入れていくのがベストプラクティスなの？を聞いた
+- まず、全てにおいてスモールスタートから始めるべき。そこから拡充。どういう状況かにもよるだろうし、ベストプラクティスのようなものは作りにくいので、試しながら段階的に導入していくといい
+- Cascade Layers: Mia なら、Reset CSS 入れるのであれば絶対使う。新規だろうと、途中からだろうと。`@layer` 自体もそうデザインされていて、`@layer` したものよりもしてないものが優位なので、段階的に導入しやすい設計になっている。
+- nesting は、まあいっぱい使って
+- `@scope` は聞くの忘れた
+- ❓ : `if()` とか `@function` とか Container Queries とか、内部に条件分岐含むやつ、デバッグしにくくない？の話
+- Container Queries はすでにデバッガブルなので
+- `if()` とか `@function` のデバッグは Canary できてる
+- ❓ : Custom Property, function, mixin はトークン化したいけど、Figmaが対応してないよね・・・
+- Mia のところでは SSOT は CSS ファイルにしているらしい。 Figma での管理は視覚的に確認したりデザイナと共有したいものだけにしている。
 
 ## Tim Neuen
 
-- Customizable Range むずい。Range の後に DatePicker の標準化がある感じある。
-- Button とか Select みたいに、見た目と In/Out がほぼ決まってるやつは、apperance を標準化するのも大変だけど楽な方ではある
-- ただ、いろんなバリエーションが見た目的にも機能的にもある Multi Range や Date Picker は劇むずくて、誰もやろうとしない。O-UI では DatePicker は Research はあるけど Proposal は出てないし、、、Range に手をつけた Brecht はすげえみたいな話をしてた
-- Tim めっちゃ WebKit に実装してた。dialog, popover, view-transition
-- `view-transition-name: auto;` 、なんで実装したん？早すぎん？
-  - CSSWG で resolve した後に TAG で Jake が謎に色々言い出して困ったw
-  - Erika (fantasai) vs Jake の構図
-  - Chromium が実装しないだろうから、クロスブラウザでサポートはないだろうな〜とのこと。
-  - saku 的には Google に実装を push する価値ある提案だと思う？って Josh に聞かれたけど、auto は match-element attr(id) の syntax sugar 的な立ち位置だから、まあ、なくてもいいかな〜みたいな。私ならそこまで実装を convince するモチベないかもな〜
-- 古い iPhone、OS のアップデートができなくて Safari のアップデートもできなくて詰むんだけど、Safari バックポートしたりできないの？
-  - できたらいいんだけど、、、WebKit のコアでハードウェアに依存したライブラリを使ってるから厳しい
-  -
+FPWD Form Control issuer。Apple で WebKit やってる人。View Transition や Dialog, Popover API などの実装をした人。
+
+- ❓ : Form Control 何がむずい？
+- Customizable Range むずい。Range の後に DatePicker の標準化が待ってる感じある。
+- Button とか Select みたいに、見た目と In/Out がほぼ決まってるやつは、見た目を標準化するのも大変だけど楽な方ではある
+- ただ、いろんなバリエーションが見た目的にも機能的にもある Multi Range や Date Picker は鬼むずくて、誰もやろうとしない。Open UI では DatePicker は Research はあるけど Proposal は出てないし、、、Range に手をつけた Brecht はすごいみたいな話をしてた
+- ❓ : `view-transition-name: auto;` 、どういう経緯で WebKit 実装したん？早すぎない？
+- CSSWG で resolve した後に TAG で Jake が謎に色々言い出して困った（笑）
+- Elika (fantasai) vs Jake の構図
+- Blink が実装しないだろうから、クロスブラウザでサポートはないだろうな〜とのこと。
+- saku 的には Google に実装を push する価値ある提案だと思う？って Josh に聞かれた
+- auto は match-element attr(id) の Syntax Sugar 的なものだと思ってるから、私ならそこまで実装を convince するモチベないかもな〜と答えた。なくてもいい代替がある。
+- ❓ : 古い iPhone、OS のアップデートができなくて Safari のアップデートもできなくて詰むんだけど、Safari バックポートしたりできないの？
+- できたらいいんだけど、、、WebKit のコアでハードウェアに依存したライブラリを使ってるから厳しい。ごめん。
 
 ## Brecht
 
-- Mia とのやりとり忘れたくなさすぎて、懇親会一旦抜けてパソコンしてたら、”Are you playing something with CSS?” って Brecht から話しかけにきてくれた・・・！！！そんなことある？！
-- こっからがすごくて、今日のトークのこととか、OpenUI での Range の proposal が難しいっていう話とか CSS Carousels の A11y の話とかしてたら、登壇者限定のバッジとステッカー、あんまあげちゃいけないやつだけどあげるよ！ってくれた！嬉しかった〜
-- 日本に関しては、コリスさんが Brecht のこの記事を訳したくて連絡を取られたのが印象に残ってるっていってた
-  - https://techhub.iodigital.com/articles/going-beyond-pixels-and-rems-in-css/relative-length-units-based-on-font
-- で、Range は input type=range に state で段階つけるのに周りが賛成しなくて rangegroup を作って Progressive Enhancement するの最初は納得いってなかったんだよねという話とか、 Carousel は ship 早かったよね、Google I/O に間に合わせるため？でもまだいろんな問題あるよね？という話になって、Adam めっちゃいい奴だから聞こうよ！っていってくれて、 Adam を呼んでくれた。
-- Adam は他の人が一緒にいたから Carousel の話できなかったけど、Talk you tomorrow! ってハイタッチしてくれて、明日 Brecht が連れて行ってもくれるみたい。楽しみ！！！
-- うおおおおおおお、Brecht いい人すぎるんだ！！！！！
+Open UI のひと。Customizable Range 周りを進めている。
+
+- Mia とのやりとり忘れたくなさすぎて、懇親会一旦抜けてメモしてたら、”Are you playing something with CSS?” って Brecht から話しかけにきてくれた・・・！そんなことある？！
+- スピーカーだったので、今日のトークのこととか、OpenUI での Range proposal が難しそうという話とか CSS Carousels の A11y の話とかしてた
+- そうしたら、登壇者限定のバッジとステッカー、特別にあげるよ！ってくれた！嬉しかった〜
+- Range は input type=range に state で段階つけるのに周りが賛成しなくて rangegroup を作って Progressive Enhancement することになったんだけど、最初は納得いってなかったんだよねというお気持ちの話とか、
+- Carousel は ship 早かったよね、Google I/O に間に合わせるため？でもまだいろんな問題あるよね？という話になって、Adam めっちゃいい奴だから聞こうよ！っていってくれて、 Adam Argyle を呼んでくれた
+  - Adam は他の人が一緒にいたから Carousel の話できなかったけど、「Talk you tomorrow!」 ってハイタッチして終わった
+- 日本に関しては、コリスさんが Brecht の以下の記事を訳したくて連絡を取られたのが印象に残ってるらしい
+  - [Going beyond pixels and (r)ems in CSS - Relative length units based on font - iO tech_hub](https://techhub.iodigital.com/articles/going-beyond-pixels-and-rems-in-css/relative-length-units-based-on-font)
 
 ## Brad Frost
 
-- Reset CSS、良さそう。諸々 agnostic なコンポーネントライブラリを目指しているから、ブラウザ間の UA Style 差分をなくすことは必要。明確なプロポーザルは出てないけど自ずとやるべきことになりそう、とのこと
-- GDS は WC の触媒になり得る？に関しては、そう思う。とのこと。O-UI の人たちには2種類人種がいる気がしてて、Brad みたいにアイディアを持ってきてリアルワールドから提案をしていく人＋ spec people や implementers みたいにもっと具体レベルで標準化を検討する人がいるから、具体段階で WC に足りないところとかが出てきたら対応できるレイヤーがある。とのこと
-- （小話）身内に不幸があったり、オンラインコースの準備で忙しかったり、7歳の娘がいたりでちょっと GDS にさく時間なかったんだよね。っていうめっちゃ現実的な事情打ち明けてくれた
-- （小話）めっちゃ比喩表現使う人で話すのに頭使った
+Atomic Design のひと。Global Design System の提唱者。
+
+- ❓ : Reset CSS の置き場として GDS は妥当だと思うんだけど、どう？を聞いた
+- Reset CSS、良さそう。諸々に依存しないグローバルなコンポーネントライブラリを目指しているから、ブラウザ間の UA Style 差分をなくすことは必要。
+- 明確なプロポーザルは出てないけど自ずとやるべきことになりそう、とのこと
+- ❓ : GDS は WC の触媒になり得る？に関して聞いた
+- そう思う。とのこと。
+- OpenUI の人たちには2種類人種がいる気がしてて、Brad みたいにアイディアを持ってきてリアルワールドから提案をしていく人＋ spec people や implementers みたいにもっと具体レベルで標準化を進める人がいる
+- だから、具体段階で WC に足りないところとかが出てきたら対応できるレイヤーは整っている。とのこと
 
 ## Bramus
 
-- Parser API について聞いた
-- TypedOM とかは Parse された後にどうするかみたいなところを扱うので、Parser API がしようとしている点で異なる。パースの段階で undefined なプロパティを見つけて、 計算して、値を返して、使えるようにする。IVACT をバイパスする方法は新規。
-- BlinkOn からのアプデは特になしだが、会期中の感触は（特に Brian の感触が）良かったぽい
-  - Extensible Web Manifesto やってたから
+Google の DevRel。 WG で Scroll Driven Animation, View Transition の議論や記事を書いている。 I/O でアニメーション系の発表してた人。
+
+- ❓ : BlinkOn で Bramus が提案していた CSS Parser API について TypedOM と絡めて聞いた
+- TypedOM は Parse された後にどうするかみたいなところを扱うので、Parser API がしようとしていることとは異なる。
+- Parse の段階で undefined なプロパティを見つけて、 計算して、値を返して、使えるようにする。IVACT をバイパスする方法として新規だと思う。とのこと
+- BlinkOn からのアプデは特になしだが、会期中の感触は（特に Brian Kardell の感触が）良かったっぽい
+  - Brian は Extensible Web Manifesto やってたから
 - August の F2F でやるかやらないか、詳細話し合って決めるらしい
   - やるってなったらユースケースいっぱいあげて、コントリビュートしてねとのこと
 
