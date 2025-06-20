@@ -10,7 +10,7 @@ published_at: 2025-06-20 12:00 # 未来の日時を指定する
 
 こんにちは！サイボウズでデザインテクノロジストをしている [saku (@sakupi01)](https://x.com/sakupi01) です。
 
-2025/06/04~05 にオランダのアムステルダムで開催された CSSDay 2025 に参加してきました🎨✨
+2025/06/05~06 にオランダのアムステルダムで開催された CSSDay 2025 に参加してきました🎨✨
 
 ![CSSDay のネームホルダー](/images/saku-cssday.png)
 
@@ -45,7 +45,7 @@ John Allsopp は、 2000 年に [A List Apart](https://alistapart.com/) で A Da
 
 今回は、「A Dao of CSS」というタイトルで、CSS がどうあるべきかという哲学について考察したトークでした。
 
-自身の A Dao of Web Design を元に、Web が、標準が、どのように Printed Design や多様なデバイスの登場と向き合ってきたかを振り返り、それによって CSS がどのような立ち位置を取ることになったのか考察します。これを元に、「The essence of the Web」として、7 つの CSS 基本原則を提唱し、CSS のあるべき姿を結論づけていました。
+自身の A Dao of Web Design を元に、Web がどのように Printed Design や多様なデバイスの登場と向き合ってきたかを振り返り、それによって CSS がどのような立ち位置を取ることになったのか考察します。これを元に、「The essence of the Web」として、7 つの CSS 基本原則を提唱し、CSS のあるべき姿を結論づけていました。
 
 ![John Allsopp](/images/john-allsopp.png)
 
@@ -84,7 +84,7 @@ https://slides.utilitybend.com/styling-select
 
 ![Brecht De Ruyte](/images/brecht-de-ruyte.png)
 
-CSE はアドベントカレンダーやカンファレンスで触れたこともあって、個人的に思い出深いトピックでした。
+CSE は[アドベントカレンダー](https://adventar.org/calendars/10293)や[カンファレンス](https://sakupi01.github.io/slides/ja/2025_burikaigi_past-present-future-openui/)で触れたこともあって、個人的に思い出深いトピックでした。
 
 CSE は最近 Open UI で [Graduated Proposal となりつつあり](https://github.com/openui/open-ui/pull/1233#pullrequestreview-2911129787)、WHATWG でも [Stage 3](https://github.com/whatwg/html/issues/9799) に到達しています。また、Day2 の Tim の発表にも関連しますが、CSE は [CSS Form Controls Module Level 1](https://www.w3.org/TR/css-forms-1/) で進められている `appearance: base;` でオプトイン可能な Form Controls の一つであり、現状 **`appearance: base-select;`** でオプトインできる CSE はそのプレビュー版的な位置付けです。
 
@@ -139,8 +139,8 @@ Google は社員に質問できるコーナーを設けており、話したか�
 
 ![質問できるコーナー](/images/help-desk.jpg)
 
-CSSDay での Google お家芸（？）の「What's Missing Missing from HTML & CSS ?」も催されていました。
-![What's Missing Missing from HTML & CSS ?](/images/whats-missing.jpg)
+CSSDay での Google お家芸（？）の「What's Missing from HTML & CSS ?」も催されていました。
+![What's Missing from HTML & CSS ?](/images/whats-missing.jpg)
 
 また、飲み物や軽食が常時提供されており、その周りで参加者同士の交流も活発に行われていました。
 
@@ -152,7 +152,7 @@ MC: Bramus
 
 Codepen の作者であり CSS-Tricks の Founder でもある Chris Coyier による、CSS Scope の有用性に関するトークでした。
 
-「CSS Scope is nothing special.」とし、これまでも Selector や MediaQueries などで CSS Rules 単位のスコープは存在していた事実を強調します。そして、Selector 単位のスコープが抱える「セレクタバッディング問題」への解決策として、React などフレームワークネイティブで CSS のスコーピング手法が存在しないものに対しては、 CSS Modules (Bundler) や CSS in JS が、Vue などフレームワークネイティブで CSS のスコーピング手法が存在するものに対してはそれが使われてきており、Chris はこれらに対して肯定的な姿勢でした。また、Utility Classes のような、各 HTML 要素に密に結びついた Class も、ある種 CSS のスコーピング手法となり得ることついても触れていました。
+「CSS Scope is nothing special.」とし、これまでも Selector や MediaQueries などで CSS Rules 単位のスコープは存在していた事実を強調します。そして、Selector 単位のスコープが抱える「セレクタバッディング問題」への解決策として、React などフレームワークネイティブで CSS のスコーピング手法が存在しないものに対しては CSS Modules (Bundler) や CSS in JS が、Vue などフレームワークネイティブで CSS のスコーピング手法が存在するものに対してはそれが使われてきており、Chris はこれらに対して肯定的な姿勢でした。また、Utility Classes のような、各 HTML 要素に密に結びついた Class も、ある種 CSS のスコーピング手法となり得ることついても触れていました。
 
 これらの事実を踏まえ、「シンプルな Selector 単位のスコープでおおむねは問題ない」「特有のドーナツスコープや Proximity を利用するのであれば、`@scope` は解決策になり得る」「要素の `<style>` 内に `@scope` を書いて Shadow DOM のスタイリングのようにして使うなら、とても良い解決策になり得る」と主張していました。
 
