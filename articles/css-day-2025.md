@@ -115,7 +115,7 @@ https://www.smashingmagazine.com/2019/02/css-fragmentation/
 
 Atomic Design を提唱した Brad Frost と、その弟である Ian Frost による、Design Token Architecture というトークでした。
 
-同じ会社の中でもさまざまなプロダクトがあり、Web/ネイティブの区別がり、ブランドがあり、色があり、ユーザ層があり、スペクトラムがあり・・・ますが、これらに一貫性を持たせ、統一的に扱うことで、manageable にしたいです。そのための仕組みとして Design System が存在しますが、その一貫性ゆえに「Design Systems kill creativity！」と言われる節もしばしば。
+同じ会社の中でもさまざまなプロダクトがあり、Web/ネイティブの区別があり、ブランドがあり、色があり、ユーザ層があり・・・ますが、これらに一貫性を持たせ、統一的に扱うことで、manageable にしたいというニーズがあります。そのための仕組みとして Design System が存在しますが、その一貫性ゆえに「Design Systems kill creativity！」と言われる節もしばしば。
 
 トークでは、「Design System = Design Token System + Component System」として再定義し、Design Token System を中心に据えた Design System のあり方を提案していました。
 
