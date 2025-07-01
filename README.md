@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/sakupi01-zenn-articles-badge.png)](https://mseep.ai/app/sakupi01-zenn-articles)
+
 # @sakupi01/zenn-articles
 
 [![npm version](https://badge.fury.io/js/@sakupi01%2Fzenn-articles.svg)](https://badge.fury.io/js/@sakupi01%2Fzenn-articles)
