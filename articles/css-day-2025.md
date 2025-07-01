@@ -63,6 +63,8 @@ CSSWG の Invited Expert であり、Sass のコアコントリビュータで�
 トークのメインは、CSS エンジンでの処理過程の切り口から、CSS Custom Properties、Functions、 Mixins が Sass のそれらとどのような点で異なるのかを解説したものでした。
 「CSS is a Declarative Language」「There's no CSS Value Resolution system in Sass.」という点が主に強調されており、Q&A セッションでも「CSS という宣言的な言語にループや逐次的な処理を組み込むことはない。もし逐次処理をしたいなら Sass を使ってね。」という回答がありました。
 
+https://slides.oddbird.net/mixins/cssday/
+
 ![Miriam Suzanne](/images/miriam-suzanne.png)
 
 Function や Mixin に関しての現場でのプラクティスが得られる感じのセッションかな〜と予想していたのですが、CSS 根底の仕組みを解説することで Sass との違いを明確にする、発展途上な技術のなかでも事実に基づいた見解を提供するような内容で、非常に知見が深まりました。Sass if、function、mixin の苦い背景から、これらを CSS でどのようにメンテナンスしていくのかがこれから問われていきそうですが、まずは Sass と CSS での違いを理解するという重要なステップを踏ませてくれるものだったかなと思います。
