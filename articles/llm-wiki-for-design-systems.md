@@ -3,7 +3,9 @@ title: "散らばった議論を LLM-Wiki でフル活用する AI 時代のデ�
 emoji: "🏃‍♀️"
 type: "idea"
 topics: ["designsystem", "llm", "ai", "documentation"]
-published: false
+published: true
+publication_name: "cybozu_frontend"
+published_at: 2026-08-05 18:00 # 未来の日時を指定する
 ---
 
 :::message
