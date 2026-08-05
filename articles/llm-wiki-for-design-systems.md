@@ -73,7 +73,7 @@ https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 
 #### `raw/`
 
-LLM が突っ込む一次資料。LLM が読み書きするもので、手動では編集しない。
+LLM が突っ込む一次資料。LLM が読みとるもので、手動では編集しない。
 
 #### `wiki/`
 
