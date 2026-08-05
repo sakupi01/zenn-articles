@@ -5,7 +5,7 @@ type: "idea"
 topics: ["designsystem", "llm", "ai", "documentation"]
 published: true
 publication_name: "cybozu_frontend"
-published_at: 2026-08-05 18:00 # 未来の日時を指定する
+published_at: 2026-08-05 12:00 # 未来の日時を指定する
 ---
 
 :::message
