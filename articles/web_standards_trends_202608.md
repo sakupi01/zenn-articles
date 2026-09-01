@@ -226,14 +226,6 @@ itemAtPosition.get(Composite({ x: 1, y: 4 })); // "book"
 Composite({ b: 2, a: 1 }) === Composite({ a: 1, b: 2 }); // true
 ```
 
-## Editing
-
-### EditContext needs a way to inform IMEs of vertical writing modes
-
-https://github.com/w3c/edit-context/issues/149
-
-`EditContext` で縦書きの IME に対応するための API が議論されています。`EditContext` はレイアウト情報を明示的に定義できるのが理想のため、現在位置の DOM の `writing-mode` から判定するのではなく、API 経由となります。
-
 ## Baseline
 
 ### 📃 August 2026 release notes
@@ -241,6 +233,12 @@ https://github.com/w3c/edit-context/issues/149
 https://web-platform-dx.github.io/web-features-explorer/release-notes/august-2026/
 
 ## Misc
+
+### EditContext needs a way to inform IMEs of vertical writing modes
+
+https://github.com/w3c/edit-context/issues/149
+
+`EditContext` で縦書きの IME に対応するための API が議論されています。`EditContext` はレイアウト情報を明示的に定義できるのが理想のため、現在位置の DOM の `writing-mode` から判定するのではなく、API 経由となります。
 
 ### Web Sustainability Guidelines を読む会 #3
 
