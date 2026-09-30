@@ -192,6 +192,77 @@ https://github.com/w3c/html-aam/issues/598
 
 結論としては、これらのグルーピングを混在して使うことが禁止（`AUTHORS must`）されることになりました。もし混在した場合には、`role="radiogroup"` の指定を無視して `name` 属性によるグルーピングを優先するように、ブラウザ側に変更を入れることを検討していくようです。
 
+## JavaScript
+
+### ECMA402
+
+#### PR #1074: Allow Locale.p.getNumberingSystems to return >1 item
+
+https://github.com/tc39/ecma402/pull/1074
+
+`Intl.Locale.prototype.getNumberingSystems()` が複数の記数法を返せるようにする修正です。6 月の TG2 で一度承認されていましたが、レビューを受けて内容が変わったため改めて議論されました。
+今回の論点は「そのロケールで**サポートされている**記数法」と「そのロケールで**一般的に使われている**記数法」は異なるのではないかというものです。
+
+ICU ベースの現行の実装では、どのロケールでも任意の十進記数法を指定して書式化できる（例：`new Intl.NumberFormat("en-u-nu-mlym").format(123)` は `"൧൨൩"` を返す）ため、「サポートされている記数法」をそのまま返すと実用的でない値まで含まれてしまいます。
+
+- 例：`new Intl.Locale('en-US').getNumberingSystems()` にマラヤーラム数字が含まれるなど
+
+結果的に「一般的に使われている」ものを返すように変更した案が TG2 として改めて承認されました。
+
+#### PR #1097: Determine getWeekInfo().firstDay using First Day Overrides
+
+https://github.com/tc39/ecma402/pull/1097
+
+`Intl.Locale.prototype.getWeekInfo()` の `firstDay`（週の始まりの曜日）の決定方法を、Unicode（UTS #35）で定められている週の始まりの決定方法に揃える修正で、TG2 として承認されました。
+
+あわせてコンストラクタのオプションと Unicode の u 拡張の優先順位（例：`region` オプションよりも `-u-rg` 拡張が優先される）や、`-u-ca-iso8601` の場合は Temporal や Intl Era/Month Code と同様に値を固定することなども確認されました。
+
+#### PR #1095: Define %TypedArray%.prototype.toLocaleString
+
+https://github.com/tc39/ecma402/pull/1095
+
+ECMA-262 の `%TypedArray%.prototype.toLocaleString` は、ECMA-402 を実装する処理系では `Array.prototype.toLocaleString` と同様に上書きすることを求めていますが、ECMA-402 側にはそれに当たる定義がなかったという問題に対する議論です。
+
+`toLocaleString` で `Intl.ListFormat` を使うべきではという議論（[#422](https://github.com/tc39/ecma402/issues/422)）もありますが、すでにリリースされたランタイムとの互換性を優先し、ブラウザがすでに実装している挙動（Array と同じ挙動）をそのまま仕様に書き起こすという方針で TG2 として承認されました。
+
+#### Sequence Units Issue #14: Significant digit formatting is problematic with sequence units
+
+https://github.com/tc39/proposal-intl-sequence-units/issues/14
+
+複合単位（Sequence Units）のプロポーザルにおいて、「5 フィート 3 インチ」のように十進数でない比率の単位を組み合わせる場合に、有効桁数（significant digits）による丸めをどう扱うかという議論です。
+
+issue では `maximumSignificantDigits` の指定時にエラーにする案が出ていましたが、`minimumSignificantDigits` についても同様の問題が発生することが指摘されました。
+
+結論として、`Intl.NumberFormat` が有効桁数による丸めを使う設定になっている場合は例外を投げる形にすることで合意されました。これは `Amount` プロポーザルで有効桁数のオプションをエラーにしている方針とも揃っています。
+
+#### Sequence Units Issue #16: Use an array instead of an object
+
+https://github.com/tc39/proposal-intl-sequence-units/issues/16
+
+複合単位の `format()` に渡す値の形を、単位 ID をキーにしたオブジェクトから配列に変更するという提案です。
+
+5 月の TC39 全体会議では `nf.format({ pound: 2, ounce: 4 })` のようにオブジェクト形式の設計で Stage 2 に到達していましたが、その後 `Amount` プロポーザル側の議論（[proposal-amount#118](https://github.com/tc39/proposal-amount/issues/118)）では、`format({ value: [10, 50], unit: "meter-and-centimeter" })` のように `value` を配列にする方向でまとまっていました。
+
+配列にすることで単位 ID をキーにしたオブジェクトで起きる不自然な挙動も避けられるため、Sequence Units も配列に切り替えることで TG2 として承認されました。
+
+#### Async APIs for Intl loading #434
+
+https://github.com/tc39/ecma402/issues/434
+
+ロケールや単位、絵文字の注釈データなど、エンジンに組み込まれていないロケールデータを非同期で読み込む API についての、2020 年から開かれている issue です。
+
+非同期読み込みはタイミング攻撃やフィンガープリンティングにつながる懸念があり、プライバシー関係者との合意形成が難しいことが見えてきました。また、Web プラットフォームにとって必要なデータであれば、多少サイズが増えてもそのまま組み込んで出荷すればよいという意見も出ました。
+
+こうした背景から issue 自体はリジェクトしないものの、現時点では優先度を下げて取り組まないことになりました。
+
+#### Cyclic year doesn't show up in resolvedOptions #816
+
+https://github.com/tc39/ecma402/issues/816
+
+`new Intl.DateTimeFormat("en", { calendar: "chinese", year: "numeric" })` のように中国暦で年を表示する場合、実際の出力は `2023(gui-mao)` のように干支の年名で表示されるにもかかわらず、`resolvedOptions()` に `year` が含まれないという問題です。
+
+何年も放置されていた問題ですが、現在も再現することが確認され、バグとして issue 内で提案されていた修正方法で対応することになりました。
+
 ## Baseline
 
 ### 📃 September 2026 release notes
