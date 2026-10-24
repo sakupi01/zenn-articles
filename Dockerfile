@@ -1,4 +1,4 @@
-FROM node:20-slim AS build
+FROM node:24-slim AS build
 
 # Set the working directory
 WORKDIR /app
@@ -18,7 +18,7 @@ RUN pnpm install --frozen-lockfile && \
     pnpm run build
 
 # Runtime image
-FROM node:20-slim
+FROM node:24-slim
 
 # Set the working directory
 WORKDIR /app
